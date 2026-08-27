@@ -33,11 +33,11 @@ const bancoDeDadosIA = [
         isFeatured: false
     },
     {
-        name: "MacBook Air M2",
-        description: "O notebook preferido dos nômades digitais e profissionais de tecnologia. Bateria de longa duração e velocidade ideal para rodar códigos e scripts.",
+        name: "Microfone Condensador RGB com Braço Articulado",
+        description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
         category: "Eletrônicos & Hardware",
-        affiliateLink: "https://amazon.com.br", 
-        logoUrl: "imagens/chatgpt.png", 
+        affiliateLink: "https://link.amazon/B0drpSi8u", // Cole o seu link da Amazon aqui!
+        logoUrl: "imagens/midjourney.png", 
         isFeatured: false
     },
     {
