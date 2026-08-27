@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Bloqueia os robôs de tentarem ler sua pasta de imagens direto
+Disallow: /imagens/

@@ -1,0 +1,195 @@
+/* RESET PROFISSIONAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #0b0f19; /* Fundo escuro profundo estilo gringo */
+    color: #f1f5f9;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+}
+
+/* HEADER PREMIUM */
+.main-header {
+    text-align: center;
+    padding: 5rem 1.5rem;
+    background: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
+    border-bottom: 1px solid #1e293b;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1.5px;
+    margin-bottom: 0.5rem;
+}
+
+.logo span {
+    color: #6366f1; /* Roxo tech */
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 1.15rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* INPUT DE BUSCA ULTRA MODERNO */
+.search-wrapper {
+    margin-bottom: 2.5rem;
+}
+
+#search-input {
+    width: 100%;
+    padding: 1.1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+    background-color: #111827;
+    color: #ffffff;
+    font-size: 1.05rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    background-color: #1f2937;
+}
+
+/* FILTROS (BADGES) */
+.filter-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #94a3b8;
+}
+
+.categories {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background-color: #111827;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #1e293b;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+}
+
+.badge.active, .badge:hover {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* CARDS DE ALTÍSSIMO PADRÃO VISUAL */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.tool-card {
+    background-color: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card:hover {
+    transform: translateY(-6px);
+    border-color: #4f46e5;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+.tool-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.tool-logo {
+    border-radius: 10px;
+    border: 1px solid #1e293b;
+    background-color: #0b0f19;
+    padding: 4px;
+}
+
+.tool-header h3 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.tool-desc {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+    flex-grow: 1;
+}
+
+/* BOTÃO DE AFILIADO - FOCO EM CRO */
+.btn-affiliate {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.9rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.btn-affiliate:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+    transform: scale(1.01);
+}
+
+/* ANIMAÇÃO DE SURGIMENTO */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+footer {
+    text-align: center;
+    padding: 3rem;
+    color: #475569;
+    font-size: 0.9rem;
+    margin-top: 6rem;
+    border-top: 1px solid #1e293b;
+    background-color: #090d16;
+}
