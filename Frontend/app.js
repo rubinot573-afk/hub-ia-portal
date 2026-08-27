@@ -148,12 +148,27 @@ function ativarBusca() {
     });
 }
 
-// 4. ANALYTICS DE CLIQUES (Métricas de CRO)
-function capturarConversao(nome) {
+// 4. ANALYTICS DE CLIQUES (Métricas de CRO conectadas com a API de Produção do Render)
+async function capturarConversao(nome) {
+    // Registra o backup local caso a internet caia
     let relatorio = JSON.parse(localStorage.getItem('hubia_analytics')) || {};
     relatorio[nome] = (relatorio[nome] || 0) + 1;
     localStorage.setItem('hubia_analytics', JSON.stringify(relatorio));
-    console.log(`📊 [CONVERSÃO] Clique registrado para: ${nome}. Total acumulado local:`, relatorio[nome]);
+    console.log(`📊 [CONVERSÃO LOCAL] Clique para: ${nome}`);
+
+    try {
+        // ROTA DA SUA API PRODUÇÃO NO RENDER
+        const API_URL = 'https://onrender.com';
+        
+        // Dispara uma atualização assíncrona silenciosa para o banco de dados MongoDB
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: nome, action: 'click' })
+        });
+    } catch (error) {
+        console.log('⚠️ Sincronização em segundo plano arquivada localmente.');
+    }
 }
 
 // 5. GERENCIADOR DE COOKIES E PREFERÊNCIAS (LGPD Avançado)
