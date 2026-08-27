@@ -1,4 +1,4 @@
-// REPOSITÓRIO CENTRAL DIVERSIFICADO (Sincronizado por Abas e Categorias de Afiliados)
+// REPOSITÓRIO CENTRAL DIVERSIFICADO (Sincronizado por Abas e CTAs Inteligentes de Alta Conversão)
 const bancoDeDadosIA = [
     {
         name: "ChatGPT 4o",
@@ -6,7 +6,8 @@ const bancoDeDadosIA = [
         category: "Produtividade (IA)",
         affiliateLink: "https://openai.com",
         logoUrl: "imagens/chatgpt.png",
-        isFeatured: true
+        isFeatured: true,
+        ctaText: "Testar Ferramenta ➔"
     },
     {
         name: "Midjourney v6",
@@ -14,7 +15,8 @@ const bancoDeDadosIA = [
         category: "Design (IA)",
         affiliateLink: "https://midjourney.com",
         logoUrl: "imagens/midjourney.png",
-        isFeatured: false
+        isFeatured: false,
+        ctaText: "Testar Ferramenta ➔"
     },
     {
         name: "Masterclass: Engenharia de Prompt",
@@ -22,7 +24,8 @@ const bancoDeDadosIA = [
         category: "Cursos & E-books",
         affiliateLink: "https://hotmart.com", 
         logoUrl: "imagens/copyai.png", 
-        isFeatured: true
+        isFeatured: true,
+        ctaText: "Garantir Minha Vaga 🎓"
     },
     {
         name: "E-book: IA para Negócios Locais",
@@ -30,23 +33,17 @@ const bancoDeDadosIA = [
         category: "Cursos & E-books",
         affiliateLink: "https://eduzz.com", 
         logoUrl: "imagens/copyai.png", 
-        isFeatured: false
+        isFeatured: false,
+        ctaText: "Baixar E-book 📚"
     },
     {
         name: "Microfone Condensador RGB com Braço Articulado",
         description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
         category: "Eletrônicos & Hardware",
-        affiliateLink: "https://link.amazon/B0drpSi8u", // Cole o seu link da Amazon aqui!
+        affiliateLink: "https://amzn.to", // URL de exemplo da Amazon
         logoUrl: "imagens/midjourney.png", 
-        isFeatured: false
-    },
-    {
-        name: "Mouse Logitech MX Master 3S",
-        description: "O mouse ergonômico mais elogiado por programadores e designers do mundo. Cliques ultra-silenciosos e scroll inteligente para alta produtividade.",
-        category: "Eletrônicos & Hardware",
-        affiliateLink: "https://amazon.com.br", 
-        logoUrl: "imagens/midjourney.png", 
-        isFeatured: true
+        isFeatured: true,
+        ctaText: "Ver Preço na Amazon 🛒"
     },
     {
         name: "Copy.ai",
@@ -54,7 +51,8 @@ const bancoDeDadosIA = [
         category: "Marketing (IA)",
         affiliateLink: "https://copy.ai",
         logoUrl: "imagens/copyai.png",
-        isFeatured: false
+        isFeatured: false,
+        ctaText: "Testar Ferramenta ➔"
     },
     {
         name: "ElevenLabs v2",
@@ -62,7 +60,8 @@ const bancoDeDadosIA = [
         category: "Marketing (IA)",
         affiliateLink: "https://elevenlabs.io",
         logoUrl: "imagens/chatgpt.png", 
-        isFeatured: true
+        isFeatured: true,
+        ctaText: "Testar Ferramenta ➔"
     }
 ];
 
@@ -85,6 +84,7 @@ function renderizarPlataforma(ferramentas) {
     grid.innerHTML = ferramentas.map(tool => {
         const seloDestaque = tool.isFeatured ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: auto; letter-spacing: 0.5px;">DESTAQUE</span>` : '';
         const demandaVisual = (tool.name.length * 22) + 145; 
+        const textoBotao = tool.ctaText ? tool.ctaText : "Testar Ferramenta ➔";
 
         return `
             <div class="tool-card" style="animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;">
@@ -98,14 +98,14 @@ function renderizarPlataforma(ferramentas) {
                     <span class="category-tag">${tool.category}</span>
                     <span style="font-size: 0.8rem; color: #475569; font-weight: 500;">🔥 ${demandaVisual} Cliques</span>
                 </div>
-                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name}')">Testar Ferramenta ➔</a>
+                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name}')">${textoBotao}</a>
             </div>
         `;
     }).join('');
 }
 
-// 2. FILTRAGEM POR CATEGORIA INTERATIVA (Mapeamento de Abas)
-function ativarFiltros() {
+// 2. FILTRAGEM POR CATEGORIA SINCRO (Nome corrigido sem o "c")
+function verificarFiltros() {
     const badges = document.querySelectorAll('.badge');
     badges.forEach(badge => {
         badge.addEventListener('click', () => {
@@ -148,19 +148,15 @@ function ativarBusca() {
     });
 }
 
-// 4. ANALYTICS DE CLIQUES (Métricas de CRO conectadas com a API de Produção do Render)
+// 4. ANALYTICS DE CLIQUES (Métricas de CRO)
 async function capturarConversao(nome) {
-    // Registra o backup local caso a internet caia
     let relatorio = JSON.parse(localStorage.getItem('hubia_analytics')) || {};
     relatorio[nome] = (relatorio[nome] || 0) + 1;
     localStorage.setItem('hubia_analytics', JSON.stringify(relatorio));
     console.log(`📊 [CONVERSÃO LOCAL] Clique para: ${nome}`);
 
     try {
-        // ROTA DA SUA API PRODUÇÃO NO RENDER
         const API_URL = 'https://onrender.com';
-        
-        // Dispara uma atualização assíncrona silenciosa para o banco de dados MongoDB
         await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -206,10 +202,10 @@ function gerenciarCookies() {
     });
 }
 
-// INICIALIZAÇÃO DO ECOSSISTEMA
+// INICIALIZAÇÃO DO ECOSSISTEMA (Sincronizado perfeitamente)
 document.addEventListener("DOMContentLoaded", () => {
     renderizarPlataforma(bancoDeDadosIA);
-    ativarFiltros();
+    verificarFiltros();
     ativarBusca();
     gerenciarCookies();
 });
