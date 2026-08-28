@@ -122,7 +122,7 @@ async function registrarCliqueReal(produto) {
     try {
         // ATENÇÃO: Substitua o 'seu-subdominio' pelo nome real do seu app no Render
         // Exemplo: https://onrender.com
-        await fetch('https://hub-ia-portal-1.onrender.com/cliques/registrar', { 
+        await fetch('https://hub-ia-portal-1.onrender.com/routes/cliques/registrar', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -135,7 +135,7 @@ async function registrarCliqueReal(produto) {
     } catch (error) {
         console.error("Erro no rastreamento do portfólio:", error);
         // Lança o erro para ser capturado pela trava de segurança do addEventListener
-        throw error; 
+        throw error;
     }
 }
 
