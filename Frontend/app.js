@@ -31,18 +31,12 @@ const bancoDeDadosIA = [
     name: "IA na Sua Rotina: 20h de Aplicação Prática",
     description: "Aprenda a usar ferramentas como ChatGPT, Gemini, Claude, SORA e FLUX para otimizar suas tarefas diárias e economizar tempo no dia a dia.",
     category: "Cursos & E-books",
-    affiliateLink: "https://hotmart.com", 
+    affiliateLink: "https://go.hotmart.com/C107368635C", 
     logoUrl: "imagens/hotmart.png", // Altere para o caminho da sua imagem da Hotmart se tiver
     isFeatured: false,
     ctaText: "Garantir Minha Vaga 🎓" // Mantendo seu sistema de CTA personalizado
 },
-    {
-  name: "IA na Sua Rotina: 20h de Aplicação Prática",
-  description: "Aprenda na prática a aplicar ChatGPT, Gemini, Claude, SORA e FLUX no seu dia a dia para automatizar tarefas e criar relatórios.",
-  category: "Cursos & E-books",
-  affiliateLink: "https://go.hotmart.com/C107368635C",
-  tipo: "curso" // Ativa o CTA dinâmico "Garantir Minha Vaga 🎓"
-},
+    
     {
         name: "Microfone Condensador RGB com Braço Articulado",
         description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
@@ -72,7 +66,7 @@ const bancoDeDadosIA = [
     }
 ];
 
-// 1. RENDERIZADOR DE CARDS PREMIUM
+// 1. RENDERIZADOR DE CARDS PREMIUM (INTEGRADO COM RASTREAMENTO REAL)
 function renderizarPlataforma(ferramentas) {
     const grid = document.getElementById('tools-grid');
     if (!grid) return;
@@ -87,6 +81,52 @@ function renderizarPlataforma(ferramentas) {
             </div>`;
         return;
     }
+
+    // Loop oficial que cria os elementos HTML dos cards na tela
+    ferramentas.forEach(produto => {
+        const card = document.createElement('div');
+        // Se isFeatured for true, aplica classe de destaque, senão usa a classe padrão
+        card.className = produto.isFeatured ? 'tool-card featured' : 'tool-card';
+        
+        card.innerHTML = `
+            <img src="${produto.logoUrl}" alt="${produto.name}" class="tool-logo">
+            <h3 class="tool-name">${produto.name}</h3>
+            <p class="tool-desc">${produto.description}</p>
+            <button class="cta-btn">${produto.ctaText}</button>
+        `;
+
+        // CAPTURA O BOTÃO DO CARD PARA ADICIONAR O EVENTO DE CLIQUE REAL
+        const botaoCta = card.querySelector('.cta-btn');
+        botaoCta.addEventListener('click', async () => {
+            // 1. Dispara a requisição em segundo plano para salvar o clique real no MongoDB
+            await registrarCliqueReal(produto);
+            
+            // 2. Redireciona o usuário para o link de afiliado em uma nova aba
+            window.open(produto.affiliateLink, '_blank');
+        });
+
+        grid.appendChild(card);
+    });
+}
+
+// 2. FUNÇÃO DE RASTREAMENTO REAL (ISOLADA E APONTANDO PARA O RENDER)
+async function registrarCliqueReal(produto) {
+    try {
+        // Envia os dados estruturados em inglês que seu array original usa
+        await fetch('https://onrender.com', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: produto.name,
+                category: produto.category,
+                affiliateLink: produto.affiliateLink,
+                isFeatured: produto.isFeatured
+            })
+        });
+    } catch (error) {
+        console.error("Erro no rastreamento do portfólio:", error);
+    }
+}
 
     grid.innerHTML = ferramentas.map(tool => {
         const seloDestaque = tool.isFeatured ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: auto; letter-spacing: 0.5px;">DESTAQUE</span>` : '';
@@ -109,7 +149,7 @@ function renderizarPlataforma(ferramentas) {
             </div>
         `;
     }).join('');
-}
+
 
 // 2. FILTRAGEM POR CATEGORIA SINCRO (Nome corrigido sem o "c")
 function verificarFiltros() {
