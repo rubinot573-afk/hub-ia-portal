@@ -202,3 +202,62 @@ footer {
     border-top: 1px solid #1e293b;
     background-color: #090d16;
 }
+/* --- ESTILIZAÇÃO DO FAQ HUBIA --- */
+.faq-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+    font-family: sans-serif;
+}
+
+.faq-titulo {
+    color: #38bdf8; /* Azul celeste combinando com o tema do admin */
+    font-size: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.faq-item {
+    background: #1e293b; /* Fundo escuro premium */
+    border: 1px solid #334155;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.faq-item[open] {
+    border-color: #38bdf8;
+    background: #1e293b;
+}
+
+.faq-pergunta {
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none; /* Remove a setinha padrão do HTML */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Cria uma setinha customizada e elegante à direita */
+.faq-pergunta::after {
+    content: "➔";
+    color: #38bdf8;
+    transition: transform 0.3s ease;
+    font-size: 14px;
+}
+
+/* Gira a setinha quando o FAQ estiver aberto */
+.faq-item[open] .faq-pergunta::after {
+    transform: rotate(90deg);
+}
+
+.faq-resposta {
+    color: #94a3b8; /* Cinza claro legível */
+    margin-top: 12px;
+    line-height: 1.6;
+    font-size: 15px;
+}
