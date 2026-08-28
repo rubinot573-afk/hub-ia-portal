@@ -5,7 +5,7 @@ const bancoDeDadosIA = [
         description: "A IA de conversação líder de mercado. Ideal para otimizar redação publicitária, criar copys de vendas e acelerar o desenvolvimento de códigos.",
         category: "Produtividade (IA)",
         affiliateLink: "https://openai.com",
-        logoUrl: "imagens/chatgpt.png",
+        logoUrl: "imagens/chatGPT.jpg",
         isFeatured: true,
         ctaText: "Testar Ferramenta ➔"
     },
@@ -14,7 +14,7 @@ const bancoDeDadosIA = [
         description: "Geração de artes digitais e imagens publicitárias ultra-realistas de altíssima fidelidade através de comandos simples de texto.",
         category: "Design (IA)",
         affiliateLink: "https://midjourney.com",
-        logoUrl: "imagens/midjourney.png",
+        logoUrl: "imagens/midjourney.jpg",
         isFeatured: false,
         ctaText: "Testar Ferramenta ➔"
     },
@@ -41,7 +41,7 @@ const bancoDeDadosIA = [
         name: "Microfone Condensador RGB com Braço Articulado",
         description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
         category: "Eletrônicos & Hardware",
-        affiliateLink: "https://amzn.to", // URL de exemplo da Amazon
+        affiliateLink: "https://link.amazon/B0do2TKsA", // URL de exemplo da Amazon
         logoUrl: "imagens/midjourney.png", 
         isFeatured: true,
         ctaText: "Ver Preço na Amazon 🛒"
@@ -51,7 +51,7 @@ const bancoDeDadosIA = [
         description: "Automação total de copywriting. Gera legendas persuasivas para Instagram, TikTok e e-mails de vendas em alta escala.",
         category: "Marketing (IA)",
         affiliateLink: "https://copy.ai",
-        logoUrl: "imagens/copyai.png",
+        logoUrl: "imagens/copyai.jpg",
         isFeatured: false,
         ctaText: "Testar Ferramenta ➔"
     },
@@ -60,7 +60,7 @@ const bancoDeDadosIA = [
         description: "A clonagem de voz e conversão de texto em áudio mais perfeita do mercado. Excelente para vídeos virais de Reels e canais de nicho sem aparecer.",
         category: "Marketing (IA)",
         affiliateLink: "https://elevenlabs.io",
-        logoUrl: "imagens/chatgpt.png", 
+        logoUrl: "imagens/elevenlabs.jpg", 
         isFeatured: true,
         ctaText: "Testar Ferramenta ➔"
     }
