@@ -28,21 +28,19 @@ const bancoDeDadosIA = [
         ctaText: "Garantir Minha Vaga 🎓"
     },
     {
-        name: "E-book: IA para Negócios Locais",
-        description: "Guia prático com estratégias exatas para agências e profissionais de marketing digital utilizarem inteligência artificial para alavancar comércios físicos.",
-        category: "Cursos & E-books",
-        affiliateLink: "https://eduzz.com", 
-        logoUrl: "imagens/copyai.png", 
-        isFeatured: false,
-        ctaText: "Baixar E-book 📚"
-    },
+    name: "IA na Sua Rotina: 20h de Aplicação Prática",
+    description: "Aprenda a usar ferramentas como ChatGPT, Gemini, Claude, SORA e FLUX para otimizar suas tarefas diárias e economizar tempo no dia a dia.",
+    category: "Cursos & E-books",
+    affiliateLink: "https://hotmart.com", 
+    logoUrl: "imagens/hotmart.png", // Altere para o caminho da sua imagem da Hotmart se tiver
+    isFeatured: false,
+    ctaText: "Garantir Minha Vaga 🎓" // Mantendo seu sistema de CTA personalizado
+},
     {
-  id: "ia-na-sua-rotina",
-  nome: "IA na Sua Rotina: 20h de Aplicação Prática",
-  categoria: "Cursos & E-books",
-  tags: ["Acesso Imediato ⚡", "Custo-Benefício 💎"],
-  descricao: "Aprenda na prática a aplicar ChatGPT, Gemini, Claude, SORA e FLUX no seu dia a dia para automatizar tarefas e criar relatórios.",
-  linkAfiliado: "https://go.hotmart.com/C107368635C",
+  name: "IA na Sua Rotina: 20h de Aplicação Prática",
+  description: "Aprenda na prática a aplicar ChatGPT, Gemini, Claude, SORA e FLUX no seu dia a dia para automatizar tarefas e criar relatórios.",
+  category: "Cursos & E-books",
+  affiliateLink: "https://go.hotmart.com/C107368635C",
   tipo: "curso" // Ativa o CTA dinâmico "Garantir Minha Vaga 🎓"
 },
     {
