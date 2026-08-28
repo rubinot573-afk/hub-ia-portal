@@ -65,7 +65,9 @@ const bancoDeDadosIA = [
         ctaText: "Testar Ferramenta ➔"
     }
 ];
-// 1. RENDERIZADOR DE CARDS PREMIUM (INTEGRADO COM RASTREAMENTO REAL)
+// =========================================================================
+// 1. RENDERIZADOR DE CARDS PREMIUM (BLINDADO E UNIFICADO)
+// =========================================================================
 function renderizarPlataforma(ferramentas) {
     const grid = document.getElementById('tools-grid');
     if (!grid) return;
@@ -81,7 +83,7 @@ function renderizarPlataforma(ferramentas) {
         return;
     }
 
-      // Código original que gera os seus cards na tela
+    // O loop começa aqui e engloba a criação e a inserção no grid
     ferramentas.forEach(produto => {
         const card = document.createElement('div');
         card.className = produto.isFeatured ? 'tool-card featured' : 'tool-card';
@@ -108,17 +110,17 @@ function renderizarPlataforma(ferramentas) {
             });
         }
 
-        // CORREÇÃO: Esta linha DEVE ficar antes de fechar o ferramentas.forEach
+        // AGORA SIM: o appendChild está garantido dentro do loop e antes do fechamento!
         grid.appendChild(card); 
-    }); // Fecha o ferramentas.forEach
-} // Fecha a função renderizarPlataforma
+    }); 
+}
 
-// 2. FUNÇÃO DE RASTREAMENTO REAL (CORRIGIDA COM A ROTA DA SUA API NO RENDER)
+// =========================================================================
+// 2. FUNÇÃO DE RASTREAMENTO REAL (ISOLADA NO ESCOPO GLOBAL)
+// =========================================================================
 async function registrarCliqueReal(produto) {
     try {
-        // ATENÇÃO: Substitua o 'seu-subdominio' pelo nome real do seu app no Render
-        // Exemplo: https://onrender.com
-        await fetch('https://hub-ia-portal-1.onrender.com/api/cliques/registrar', { 
+        await fetch('https://onrender.com', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -130,8 +132,7 @@ async function registrarCliqueReal(produto) {
         });
     } catch (error) {
         console.error("Erro no rastreamento do portfólio:", error);
-        // Lança o erro para ser capturado pela trava de segurança do addEventListener
-        throw error;
+        throw error; 
     }
 }
 
