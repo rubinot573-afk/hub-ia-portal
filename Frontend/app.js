@@ -65,7 +65,6 @@ const bancoDeDadosIA = [
         ctaText: "Testar Ferramenta ➔"
     }
 ];
-
 // 1. RENDERIZADOR DE CARDS PREMIUM (INTEGRADO COM RASTREAMENTO REAL)
 function renderizarPlataforma(ferramentas) {
     const grid = document.getElementById('tools-grid');
@@ -89,31 +88,41 @@ function renderizarPlataforma(ferramentas) {
         card.className = produto.isFeatured ? 'tool-card featured' : 'tool-card';
         
         card.innerHTML = `
-            <img src="${produto.logoUrl}" alt="${produto.name}" class="tool-logo">
-            <h3 class="tool-name">${produto.name}</h3>
-            <p class="tool-desc">${produto.description}</p>
-            <button class="cta-btn">${produto.ctaText}</button>
+            <img src="${produto.logoUrl || 'imagens/default.png'}" alt="${produto.name || 'Produto'}" class="tool-logo">
+            <h3 class="tool-name">${produto.name || 'Sem nome'}</h3>
+            <p class="tool-desc">${produto.description || 'Sem descrição'}</p>
+            <button class="cta-btn">${produto.ctaText || 'Acessar ➔'}</button>
         `;
 
         // CAPTURA O BOTÃO DO CARD PARA ADICIONAR O EVENTO DE CLIQUE REAL
         const botaoCta = card.querySelector('.cta-btn');
-        botaoCta.addEventListener('click', async () => {
-            // 1. Dispara a requisição em segundo plano para salvar o clique real no MongoDB
-            await registrarCliqueReal(produto);
-            
-            // 2. Redireciona o usuário para o link de afiliado em uma nova aba
-            window.open(produto.affiliateLink, '_blank');
-        });
+        if (botaoCta) {
+            botaoCta.addEventListener('click', async () => {
+                // 1. Dispara a requisição para salvar o clique real no MongoDB
+                // Usamos o await com uma trava de segurança para o site não congelar caso o Render falhe
+                try {
+                    await registrarCliqueReal(produto);
+                } catch (err) {
+                    console.error("Falha ao registrar estatística, mas redirecionando usuário...", err);
+                }
+                
+                // 2. Redireciona o usuário para o link de afiliado em uma nova aba
+                if (produto.affiliateLink) {
+                    window.open(produto.affiliateLink, '_blank');
+                }
+            });
+        }
 
         grid.appendChild(card);
     });
 }
 
-// 2. FUNÇÃO DE RASTREAMENTO REAL (ISOLADA E APONTANDO PARA O RENDER)
+// 2. FUNÇÃO DE RASTREAMENTO REAL (CORRIGIDA COM A ROTA DA SUA API NO RENDER)
 async function registrarCliqueReal(produto) {
     try {
-        // Envia os dados estruturados em inglês que seu array original usa
-        await fetch('https://onrender.com', { 
+        // ATENÇÃO: Substitua o 'seu-subdominio' pelo nome real do seu app no Render
+        // Exemplo: https://onrender.com
+        await fetch('https://hub-ia-portal-1.onrender.com/cliques/registrar', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -125,6 +134,8 @@ async function registrarCliqueReal(produto) {
         });
     } catch (error) {
         console.error("Erro no rastreamento do portfólio:", error);
+        // Lança o erro para ser capturado pela trava de segurança do addEventListener
+        throw error; 
     }
 }
 
