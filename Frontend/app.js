@@ -37,6 +37,15 @@ const bancoDeDadosIA = [
         ctaText: "Baixar E-book 📚"
     },
     {
+  id: "ia-na-sua-rotina",
+  nome: "IA na Sua Rotina: 20h de Aplicação Prática",
+  categoria: "Cursos & E-books",
+  tags: ["Acesso Imediato ⚡", "Custo-Benefício 💎"],
+  descricao: "Aprenda na prática a aplicar ChatGPT, Gemini, Claude, SORA e FLUX no seu dia a dia para automatizar tarefas e criar relatórios.",
+  linkAfiliado: "https://go.hotmart.com/C107368635C",
+  tipo: "curso" // Ativa o CTA dinâmico "Garantir Minha Vaga 🎓"
+},
+    {
         name: "Microfone Condensador RGB com Braço Articulado",
         description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
         category: "Eletrônicos & Hardware",
