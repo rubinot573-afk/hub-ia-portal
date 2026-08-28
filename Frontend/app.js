@@ -81,10 +81,9 @@ function renderizarPlataforma(ferramentas) {
         return;
     }
 
-    // Loop oficial que cria os elementos HTML dos cards na tela
+      // Código original que gera os seus cards na tela
     ferramentas.forEach(produto => {
         const card = document.createElement('div');
-        // Se isFeatured for true, aplica classe de destaque, senão usa a classe padrão
         card.className = produto.isFeatured ? 'tool-card featured' : 'tool-card';
         
         card.innerHTML = `
@@ -94,28 +93,25 @@ function renderizarPlataforma(ferramentas) {
             <button class="cta-btn">${produto.ctaText || 'Acessar ➔'}</button>
         `;
 
-        // CAPTURA O BOTÃO DO CARD PARA ADICIONAR O EVENTO DE CLIQUE REAL
         const botaoCta = card.querySelector('.cta-btn');
         if (botaoCta) {
             botaoCta.addEventListener('click', async () => {
-                // 1. Dispara a requisição para salvar o clique real no MongoDB
-                // Usamos o await com uma trava de segurança para o site não congelar caso o Render falhe
                 try {
                     await registrarCliqueReal(produto);
                 } catch (err) {
                     console.error("Falha ao registrar estatística, mas redirecionando usuário...", err);
                 }
                 
-                // 2. Redireciona o usuário para o link de afiliado em uma nova aba
                 if (produto.affiliateLink) {
                     window.open(produto.affiliateLink, '_blank');
                 }
             });
         }
 
-        grid.appendChild(card);
-    });
-}
+        // CORREÇÃO: Esta linha DEVE ficar antes de fechar o ferramentas.forEach
+        grid.appendChild(card); 
+    }); // Fecha o ferramentas.forEach
+} // Fecha a função renderizarPlataforma
 
 // 2. FUNÇÃO DE RASTREAMENTO REAL (CORRIGIDA COM A ROTA DA SUA API NO RENDER)
 async function registrarCliqueReal(produto) {
