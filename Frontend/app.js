@@ -66,7 +66,7 @@ const bancoDeDadosIA = [
     }
 ];
 // =========================================================================
-// 1. RENDERIZADOR DE CARDS PREMIUM (BLINDADO E UNIFICADO)
+// 1. RENDERIZADOR DE CARDS PREMIUM (MANTENDO ESTRUTURA ORIGINAL DE .MAP)
 // =========================================================================
 function renderizarPlataforma(ferramentas) {
     const grid = document.getElementById('tools-grid');
@@ -83,83 +83,53 @@ function renderizarPlataforma(ferramentas) {
         return;
     }
 
-    // O loop começa aqui e engloba a criação e a inserção no grid
-    ferramentas.forEach(produto => {
-        const card = document.createElement('div');
-        card.className = produto.isFeatured ? 'tool-card featured' : 'tool-card';
-        
-        card.innerHTML = `
-            <img src="${produto.logoUrl || 'imagens/default.png'}" alt="${produto.name || 'Produto'}" class="tool-logo">
-            <h3 class="tool-name">${produto.name || 'Sem nome'}</h3>
-            <p class="tool-desc">${produto.description || 'Sem descrição'}</p>
-            <button class="cta-btn">${produto.ctaText || 'Acessar ➔'}</button>
-        `;
-
-        const botaoCta = card.querySelector('.cta-btn');
-        if (botaoCta) {
-            botaoCta.addEventListener('click', async () => {
-                try {
-                    await registrarCliqueReal(produto);
-                } catch (err) {
-                    console.error("Falha ao registrar estatística, mas redirecionando usuário...", err);
-                }
-                
-                if (produto.affiliateLink) {
-                    window.open(produto.affiliateLink, '_blank');
-                }
-            });
-        }
-
-        // AGORA SIM: o appendChild está garantido dentro do loop e antes do fechamento!
-        grid.appendChild(card); 
-    }); 
-}
-
-// =========================================================================
-// 2. FUNÇÃO DE RASTREAMENTO REAL (ISOLADA NO ESCOPO GLOBAL)
-// =========================================================================
-async function registrarCliqueReal(produto) {
-    try {
-        await fetch('https://onrender.com', { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: produto.name,
-                category: produto.category,
-                affiliateLink: produto.affiliateLink,
-                isFeatured: produto.isFeatured
-            })
-        });
-    } catch (error) {
-        console.error("Erro no rastreamento do portfólio:", error);
-        throw error; 
-    }
-}
-
+    // Injeta os cards de forma limpa usando a sua estrutura original de .map()
     grid.innerHTML = ferramentas.map(tool => {
         const seloDestaque = tool.isFeatured ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: auto; letter-spacing: 0.5px;">DESTAQUE</span>` : '';
-        const demandaVisual = (tool.name.length * 22) + 145; 
         const textoBotao = tool.ctaText ? tool.ctaText : "Testar Ferramenta ➔";
 
+        // NOTA: Removemos o contador falso de cliques aleatórios para limpar o portfólio!
         return `
             <div class="tool-card" style="animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;">
                 <div class="tool-header">
-                    <img src="${tool.logoUrl}" alt="Logo ${tool.name}" class="tool-logo" width="55" height="55" style="object-fit: cover;" onerror="this.src='https://placehold.co'">
+                    <img src="${tool.logoUrl || 'imagens/default.png'}" alt="Logo ${tool.name}" class="tool-logo" width="55" height="55" style="object-fit: cover;" onerror="this.src='https://placehold.co'">
                     <h3>${tool.name}</h3>
                     ${seloDestaque}
                 </div>
                 <p class="tool-desc">${tool.description}</p>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.4rem; border-top: 1px solid #1e293b; padding-top: 1rem;">
                     <span class="category-tag">${tool.category}</span>
-                    <span style="font-size: 0.8rem; color: #475569; font-weight: 500;">🔥 ${demandaVisual} Cliques</span>
                 </div>
-                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name}')">${textoBotao}</a>
+                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name}', '${tool.category}', '${tool.affiliateLink}', ${tool.isFeatured})">${textoBotao}</a>
             </div>
         `;
     }).join('');
+}
 
+// =========================================================================
+// 2. FUNÇÃO DE RASTREAMENTO REAL (CHAMADA PELO ONCLICK DO LINK)
+// =========================================================================
+async function capturarConversao(name, category, affiliateLink, isFeatured) {
+    try {
+        // Envia as métricas diretamente para o seu back-end funcional no Render
+        await fetch('https://onrender.com', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                category: category,
+                affiliateLink: affiliateLink,
+                isFeatured: !!isFeatured
+            })
+        });
+    } catch (error) {
+        console.error("Erro no rastreamento do portfólio:", error);
+    }
+}
 
-// 2. FILTRAGEM POR CATEGORIA SINCRO (Nome corrigido sem o "c")
+// =========================================================================
+// 3. FILTRAGEM POR CATEGORIA SINCRO (INTEGRADINHA E SEM QUEBRAS)
+// =========================================================================
 function verificarFiltros() {
     const badges = document.querySelectorAll('.badge');
     badges.forEach(badge => {
@@ -180,7 +150,6 @@ function verificarFiltros() {
         });
     });
 }
-
 // 3. ENGENHARIA DE BUSCA DINÂMICA
 function ativarBusca() {
     const input = document.getElementById('search-input');
