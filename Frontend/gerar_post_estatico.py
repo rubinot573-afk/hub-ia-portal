@@ -64,7 +64,20 @@ def construir_html_premium(post):
             max-width: 720px;
             margin: 0 auto;
         }}
-        h1 {{ font-size: 2.5rem; color: #FFF; margin-bottom: 5px; }}
+        h1 {{ 
+            font-size: 2rem; 
+            color: #FFF; 
+            margin-bottom: 5px; 
+            line-height: 1.3;
+        }}
+        
+        /* Regra que detecta celulares e diminui o título automaticamente */
+        @media (max-width: 480px) {{
+            h1 {{
+                font-size: 1.5rem;
+            }}
+        }}
+
         .meta-info {{ color: var(--text-muted); font-size: 0.95rem; margin-bottom: 40px; }}
         .content {{ font-size: 1.15rem; color: #E2E8F0; }}
         
