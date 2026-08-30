@@ -227,7 +227,7 @@ def gerar_sitemap_xml():
     print("🚀 [SUCESSO] sitemap.xml atualizado na raiz do seu Frontend!")
 
 # Fluxo de Execução Principal do Terminal
-if _name_ == "_main_":
+if __name__ == "__main__":
     # Garante a casca limpa da listagem de cards caso ela não exista
     caminho_listagem = os.path.join("blog", "index.html")
     os.makedirs("blog", exist_ok=True)

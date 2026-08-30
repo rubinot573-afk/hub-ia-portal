@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://sitemaps.org">
+  <url>
+    <loc>https://vercel.app/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://vercel.app/blog</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://vercel.app/blog/como-criar-vozes-ultra-realistas-com-elevenlabs</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://vercel.app/blog/elevenlabs-na-pratica-transforme-texto-em-voz-profissional-em-minutos</loc>
+    <priority>0.6</priority>
+  </url>
+</urlset>
