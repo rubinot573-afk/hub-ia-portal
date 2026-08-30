@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog & Tutoriais IA | HubIA</title>
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-dark: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --accent-glow: #38BDF8;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FFF; }
+        p.subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; }
+        
+        /* Grid de Artigos */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .blog-card {
+            background-color: var(--card-dark);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-glow);
+        }
+        .category-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-glow);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            align-self: flex-start;
+            margin-bottom: 15px;
+        }
+        .blog-card h3 { margin: 0 0 10px 0; font-size: 1.3rem; color: #FFF; }
+        .blog-card p { margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1>Central de Tutoriais HubIA</h1>
+        <p class="subtitle">Aprenda a dominar ferramentas de IA e impulsione seus resultados.</p>
+
+        <section class="blog-grid">
+            
+            <!-- CARD 1: Artigo do ElevenLabs -->
+            <a href="/blog/como-criar-vozes-ultra-realistas-com-elevenlabs" class="blog-card">
+                <div>
+                    <span class="category-badge">Áudio e IA</span>
+                    <h3>Como Criar Vozes Ultra-Realistas com ElevenLabs</h3>
+                    <p>Aprenda a usar a inteligência artificial do ElevenLabs para clonagem de voz e locução em segundos.</p>
+                </div>
+            </a>
+
+            <!-- Quando criar novos posts no Python, basta copiar o bloco acima e colar aqui embaixo trocando o href e os textos -->
+
+        </section>
+    </main>
+
+</body>
+</html>
