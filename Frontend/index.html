@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JZV00F6ZJH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JZV00F6ZJH');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JZV00F6ZJH"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-JZV00F6ZJH');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -28,17 +27,13 @@
 </head>
 <body>
 
-    <body>
-
     <!-- BARRA DE NAVEGAÇÃO PREMIUM (HUBIA) -->
     <nav style="display: flex; justify-content: space-between; align-items: center; padding: 16px 5%; background-color: #0B0F19; border-bottom: 1px solid #1E293B; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(8px); background-color: rgba(11, 15, 25, 0.8);">
-        <!-- Lado Esquerdo: Nome Limpo para não brigar com o logo do header -->
-        <a href="/" style="font-weight: 800; color: #FFF; font-size: 1.1rem; text-decoration: none; letter-spacing: -0.5px;">
+        <a href="/" style="font-weight: 800; color: #FFF; font-size: 1.1rem; text-decoration: none; letter-spacing: -0.5px; font-family: system-ui, -apple-system, sans-serif;">
             Hub<span style="color: #38BDF8;">IA</span>
         </a>
         
-        <!-- Lado Direito: Links de Navegação -->
-        <div style="display: flex; gap: 20px; align-items: center;">
+        <div style="display: flex; gap: 20px; align-items: center; font-family: system-ui, -apple-system, sans-serif;">
             <a href="/" style="color: #94A3B8; font-weight: 500; text-decoration: none; font-size: 0.95rem; transition: color 0.2s;" onmouseover="this.style.color='#FFF'" onmouseout="this.style.color='#94A3B8'">
                 Home
             </a>
@@ -48,15 +43,13 @@
         </div>
     </nav>
 
-    <!-- O SEU CABEÇALHO ATUAL CONTINUA AQUI EMBAIXO EXATAMENTE COMO ESTAVA -->
     <!-- CABEÇALHO COM GRADIENTE PREMIUM E TRANSPARÊNCIA DE COMISSÕES -->
     <header class="main-header">
         <div class="logo">🚀 Hub<span>IA</span></div>
         <p class="subtitle">O seu laboratório e diretório inteligente de ferramentas de alta performance</p>
         
-        <!-- TRANSPARÊNCIA DE AFILIADOS (Obrigatório Conar / Google SEO) -->
         <p class="affiliate-disclosure" style="color: #475569; font-size: 0.8rem; margin: 1.2rem auto 0 auto; font-style: italic; max-width: 700px; line-height: 1.4;">
-            Aviso de Transparência: Alguns links externos neste diretório são links de afiliados. Se você optar por assinar uma ferramenta ou comprar um equipamento através deles, nós podemos receber uma comissão financeira, sem absolutamente nenhum custo adicional para você. Isso apoia nosso laboratório de estudos.
+            Aviso de Transparência: Some external links in this directory are affiliate links. If you choose to subscribe to a tool or buy equipment through them, we may receive a financial commission, at absolutely no additional cost to you. This supports our study laboratory.
         </p>
     </header>
 
@@ -86,6 +79,7 @@
         </section>
         
     </main>
+
 <!-- SEÇÃO FAQ - HUBIA -->
 <section class="faq-container">
     <h2 class="faq-titulo">Perguntas Frequentes (FAQ)</h2>
@@ -142,7 +136,7 @@
             <!-- Aviso de Isenção e Transparência (Compliance Conar/LGPD) -->
             <div style="margin-top: 1rem; padding-top: 1.2rem; border-top: 1px solid #1e293b; font-size: 0.8rem; color: #475569; text-align: justify; max-width: 800px; margin-left: auto; margin-right: auto;">
                 <p style="margin: 0;">
-                    <strong>Nota de Transparência de Afiliados:</strong> O HubIA opera de forma totalmente independente como um agregador de soluções digitais. Ao clicar nos botões de recomendação e adquirir ferramentas ou infoprodutos, nós podemos receber uma bonificação de afiliado, sem gerar taxas adicionais para o usuário. Essa estrutura valida testes reais de conversão sob conformidade com o CONAR, as diretrizes de SEO do Google e as boas práticas da LGPD.
+                    <strong>Nota de Transparência de Afiliados:</strong> O HubIA opera de forma totalmente independente como um agregador de solutions digitais. Ao clicar nos botões de recomendação e adquirir ferramentas ou infoprodutos, nós podemos receber uma bonificação de afiliado, sem gerar taxas adicionais para o usuário. Essa estrutura valida testes reais de conversão sob conformidade com o CONAR, as diretrizes de SEO do Google e as boas práticas da LGPD.
                 </p>
             </div>
             
@@ -173,6 +167,46 @@
         </div>
     </div>
 
+    <!-- CARREGAMENTO DO DIRETÓRIO DINÂMICO -->
     <script src="app.js"></script>
+
+    <!-- SCRIPT DO MENSAGEIRO: INTEGRAÇÃO DOS BOTÕES COM A API DO RENDER (routes/cliques.js) -->
+    <script>
+        document.body.addEventListener('click', function(e) {
+            // Escuta o clique nos botões dinâmicos que possuam a tag data-track
+            const link = e.target.closest('[data-track]');
+            
+            if (link) {
+                // Captura as tags para bater com o desestruturador req.body do Express
+                const name = link.getAttribute('data-name');
+                const category = link.getAttribute('data-category');
+                const affiliateLink = link.getAttribute('href');
+                const isFeatured = link.getAttribute('data-featured') === 'true';
+
+                // 1. Envia os dados de Analytics estruturados para o GA4
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click_afiliado', {
+                        'product_name': name,
+                        'category': category,
+                        'is_featured': isFeatured
+                    });
+                }
+
+                // 2. Dispara a requisição em background assíncrona para a API cliques.js
+                if (navigator.sendBeacon) {
+                    const headers = { type: 'application/json' };
+                    const payload = new Blob([JSON.stringify({
+                        name: name,
+                        category: category,
+                        affiliateLink: affiliateLink,
+                        isFeatured: isFeatured
+                    })], headers);
+
+                    // Altere o link abaixo para o endereço real da sua API ativa no Render
+                    navigator.sendBeacon('https://seu-backend-render.com', payload);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
