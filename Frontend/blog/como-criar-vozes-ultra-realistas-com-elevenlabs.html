@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Criar Vozes Ultra-Realistas com ElevenLabs | HubIA</title>
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-dark: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --accent-glow: #38BDF8;
+            --accent-purple: #A855F7;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 2.5rem; color: #FFF; margin-bottom: 5px; }
+        .meta-info { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 40px; }
+        .content { font-size: 1.15rem; color: #E2E8F0; }
+        
+        /* CTAs de Alta Conversão */
+        .cta-container {
+            background: linear-gradient(135deg, #1E1B4B 0%, #311042 100%);
+            border: 1px solid var(--accent-purple);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+        .cta-btn {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: #000;
+            font-weight: bold;
+            padding: 14px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-size: 1rem;
+            transition: transform 0.2s, filter 0.2s;
+        }
+        .cta-btn:hover { 
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <article class="container">
+        <h1>Como Criar Vozes Ultra-Realistas com ElevenLabs</h1>
+        <div class="meta-info">
+            <span>Categoria: <strong>Áudio e IA</strong></span>
+        </div>
+        
+        <div id="post-content" class="content">
+            <p>A inteligência artificial revolucionou a dublagem e a criação de conteúdo com a clonagem de voz. O ElevenLabs é hoje a ferramenta líder de mercado, permitindo criar locuções ultra-realistas com expressões humanas em segundos. Para conseguir o melhor resultado, ajuste a estabilidade em 40% nas configurações avançadas do painel.</p>
+            
+            <!-- FUNIL 1: CTA de Afiliado (Ferramenta) -->
+            <div class="cta-container">
+                <h3>Pronto para dominar essa tecnologia?</h3>
+                <p>Crie sua conta na ferramenta agora mesmo e comece a aplicar o que aprendeu.</p>
+                <a href="https://elevenlabs.io" 
+                   data-track="partnerstack" 
+                   data-name="elevenlabs" 
+                   target="_blank" 
+                   class="cta-btn">Testar Elevenlabs Agora</a>
+            </div>
+
+            <!-- FUNIL 2: Upsell de Infoproduto (E-book) -->
+            <div class="cta-container" style="border-color: var(--accent-glow);">
+                <h3>Quer acelerar seus resultados com IA?</h3>
+                <p>Baixe nosso Guia Estratégico com mais de 500 prompts e templates prontos.</p>
+                <a href="https://hotmart.com" 
+                   data-track="hotmart" 
+                   data-name="ebook-premium" 
+                   target="_blank" 
+                   class="cta-btn" 
+                   style="background: var(--accent-purple); color: #fff;">Garantir E-book com Desconto</a>
+            </div>
+        </div>
+    </article>
+
+    <script>
+        // Rastreamento inteligente acionado no clique dos CTAs
+        document.getElementById('post-content').addEventListener('click', function(e) {
+            const link = e.target.closest('[data-track]');
+            if (link) {
+                const tipo = link.getAttribute('data-track');
+                const nome = link.getAttribute('data-name');
+                
+                // Dispara o evento para o seu GA4 se ele já estiver carregado globalmente
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click_cta_blog', { 'cta_type': tipo, 'cta_name': nome });
+                }
+                
+                // Envia para o seu back-end no Render em segundo plano
+                if (navigator.sendBeacon) {
+                    const payload = JSON.stringify({ tipo: tipo, item: nome, data: new Date() });
+                    navigator.sendBeacon('https://seu-backend-render.com', payload);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
