@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/blog", "destination": "/Frontend/blog/index.html" },
+    { "source": "/blog/:slug", "destination": "/Frontend/blog/:slug.html" }
+  ]
+}
