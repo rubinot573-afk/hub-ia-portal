@@ -129,7 +129,7 @@ def construir_html_premium(post):
                    data-category="{post['categoria']}" 
                    data-featured="false"
                    target="_blank" 
-                   class="cta-btn">Testar {post['nome_item']} Agora</a>
+                   class="cta-btn">Conferir {post['nome_item']} Agora</a>
             </div>
 
             <!-- FUNIL 2: Upsell de Infoproduto (E-book) -->
