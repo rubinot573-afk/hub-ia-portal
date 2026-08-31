@@ -25,8 +25,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
 
-    <!-- 🔥 DADOS ESTRUTURADOS DO FAQ ATUALIZADOS COM O TEXTO REAL DO SITE -->
-    <script type="application/ld+json">
+    <!-- 🔥 DADOS ESTRUTURADOS DO FAQ ATUALIZADOS COM O TEXTO REAL DO SITE -->    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
@@ -174,9 +173,10 @@
     <div id="cookie-bar" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #111827; border: 1px solid #1e293b; padding: 1.2rem 1.8rem; border-radius: 14px; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 9999; max-width: 90%; width: 620px;">
         <div style="display: flex; align-items: start; gap: 1rem;">
             <p style="font-size: 0.85rem; color: #94a3b8; margin: 0; line-height: 1.45;">
-                Utilizamos cookies e tecnologias semelhantes para coletar dados de navegação, analisar nosso tráfego de marketing e personalizar sua experiência de acordo com a LGPD. Você pode gerenciar suas preferências a qualquer momento. 
-                <a href="politica-privacidade.html" target="_blank" style="color: #6366f1; text-decoration: underline; font-weight: 600; margin-left: 4px;">Leia nossa Política de Privacidade</a>.
-            </p>
+    Utilizamos cookies e tecnologias semelhantes para coletar dados de navegação, analisar nosso tráfego de marketing e personalizar sua experiência de acordo com a LGPD. Você pode gerenciar suas preferências a qualquer momento. 
+    <a href="politica-privacidade.html" target="_blank" style="color: #6366f1; text-decoration: underline; font-weight: 600; margin-left: 4px;">Política de Privacidade</a> e 
+    <a href="termos-de-uso.html" target="_blank" style="color: #6366f1; text-decoration: underline; font-weight: 600; margin-left: 4px;">Termos de Uso</a>.
+</p>
         </div>
         
         <div id="cookie-options" style="display: none; gap: 1.5rem; background: #0f172a; padding: 0.8rem; border-radius: 8px; border: 1px solid #1e293b; font-size: 0.8rem; color: #94a3b8;">
@@ -210,7 +210,7 @@
                 const affiliateLink = link.getAttribute('href');
                 const isFeatured = link.getAttribute('data-featured') === 'true';
 
-                // 1. Envia os dados de Analytics estruturados para o GA4
+                // 1. Envia os dados de Analytics estruturados para o GA4 (Mantido Perfeito!)
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'click_afiliado', {
                         'product_name': name,
@@ -219,21 +219,26 @@
                     });
                 }
 
-                // 2. Dispara a requisição em background assíncrona para a API cliques.js
-                if (navigator.sendBeacon) {
-                    const headers = { type: 'application/json' };
-                    const payload = new Blob([JSON.stringify({
+                // 2. Dispara a requisição via Fetch para passar pela barreira do CORS do seu Render
+                // Trocamos o sendBeacon por fetch para garantir compatibilidade com as travas de segurança
+                fetch('https://onrender.com', { // <-- COLOQUE AQUI A URL REAL DA SUA API DO RENDER!
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
                         name: name,
                         category: category,
                         affiliateLink: affiliateLink,
                         isFeatured: isFeatured
-                    })], headers);
-
-                    // Altere o link abaixo para o endereço real da sua API ativa no Render
-                    navigator.sendBeacon('https://seu-backend-render.com', payload);
-                }
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log('Métrica registrada com sucesso:', data))
+                .catch(err => console.error('Erro ao enviar métrica para o Render:', err));
             }
         });
     </script>
 </body>
+</html>
 </html>
