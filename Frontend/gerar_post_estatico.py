@@ -1,17 +1,32 @@
 import os
 import datetime
+import json
+import re
+import unicodedata
 from html import escape
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def obter_dados_do_usuario():
     """Captura os dados do artigo tratando automaticamente palavras-chave textuais simples."""
     print(" --- PAINEL DE CRIAÇÃO DE ARTIGOS (HUBIA) ---")
     
     titulo = input("Digite o TÍTULO do artigo: ").strip()
-    slug = titulo.lower().replace(" ", "-").replace(":", "").replace("?", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ã", "a").replace("ç", "c")
+    
+    # 1. Remove todos os acentos e cedilhas de forma mágica (transforma 'ç' em 'c', 'ã' em 'a', etc.)
+    slug_limpo = unicodedata.normalize('NFKD', titulo).encode('ascii', 'ignore').decode('utf-8')
+    
+    # 2. Transforma em minúsculo e troca os espaços por hífens
+    slug_limpo = slug_limpo.lower().replace(" ", "-")
+    
+    # 3. Remove QUALQUER caractere que não seja letra, número ou hífen (limpa de vez :, ?, !, @, etc.)
+    slug = re.sub(r'[^a-z0-9-]+', '-', slug_limpo).strip('-')
+    if not slug:
+        slug = "artigo"
     categoria = input("Digite a CATEGORIA (ex: Produtividade (IA), Cursos & E-books): ").strip()
     descricao_seo = input("Digite uma descrição curta (1 frase para o LinkedIn/Google): ").strip()
     
-    caminho_txt = "artigo.txt"
+    caminho_txt = os.path.join(BASE_DIR, "artigo.txt")
     print(f"\n Lendo o conteúdo de '{caminho_txt}'...")
     
     if not os.path.exists(caminho_txt):
@@ -34,12 +49,12 @@ def obter_dados_do_usuario():
         # Formatação inteligente para os blocos de comando em inglês
         if p.startswith('"') or p.startswith('"[Tone:') or p.startswith('Create a') or p.startswith('Act as a'):
             prompt_limpo = p.strip('"')
-            linhas_texto.append(f'<pre><code>"{prompt_limpo}"</code></pre>')
+            linhas_texto.append(f'<pre><code>{escape(prompt_limpo, quote=False)}</code></pre>')
         # Formatação inteligente para os títulos textuais
         elif p.startswith('PRIMEIRA') or p.startswith('SEGUNDA') or p.startswith('TERCEIRA') or p.startswith('PROMPT'):
-            linhas_texto.append(f'<h3>{p}</h3>')
+            linhas_texto.append(f'<h3>{escape(p)}</h3>')
         else:
-            linhas_texto.append(f'<p>{p}</p>')
+            linhas_texto.append(f'<p>{escape(p)}</p>')
             
     conteudo_corpo = "\n        ".join(linhas_texto)
     
@@ -66,8 +81,26 @@ def obter_dados_do_usuario():
 def construir_html_premium(post):
     """Gera o código HTML com suporte a blocos de código e Meta Tags do LinkedIn."""
     data_atual = datetime.date.today().strftime("%d/%m/%Y")
-    dom_base = "https://vercel.app"
+    dom_base = "https://frontendia-blush.vercel.app"
     url_completa_post = f"{dom_base}/blog/{post['slug']}"
+
+    titulo = escape(post['titulo'])
+    categoria = escape(post['categoria'])
+    descricao = escape(post['descricao'], quote=True)
+    url_afiliado = escape(post['url_afiliado'], quote=True)
+    nome_item = escape(post['nome_item'])
+    url_checkout = escape(post['url_checkout'], quote=True)
+    schema = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post["titulo"],
+        "description": post["descricao"],
+        "datePublished": datetime.date.today().isoformat(),
+        "url": url_completa_post,
+        "author": {"@type": "Person", "name": "Rafael"},
+        "publisher": {"@type": "Organization", "name": "HubIA",
+                      "logo": {"@type": "ImageObject", "url": f"{dom_base}/assets/logo.png"}}
+    }, ensure_ascii=False)
 
     cta_afiliado_html = ""
     if post['url_afiliado'] and post['nome_item']:
@@ -75,7 +108,7 @@ def construir_html_premium(post):
             <div class="cta-container">
                 <h3>Pronto para dominar essa tecnologia?</h3>
                 <p>Crie sua conta na ferramenta agora mesmo e comece a aplicar o que aprendeu.</p>
-                <a href="{post['url_afiliado']}" data-track="true" data-name="{post['nome_item']}" data-category="{post['categoria']}" data-featured="false" target="_blank" class="cta-btn">Conferir {post['nome_item']} Agora</a>
+                <a href="{url_afiliado}" data-track="true" data-name="{nome_item}" data-category="{categoria}" data-featured="false" target="_blank" rel="noopener noreferrer" class="cta-btn">Conferir {nome_item} Agora</a>
             </div>
         """
 
@@ -86,7 +119,7 @@ def construir_html_premium(post):
             <div class="cta-container" style="border-color: var(--accent-glow);">
                 <h3>Quer acelerar seus resultados com IA?</h3>
                 <p>Baixe nosso Guia Estratégico com mais de 500 prompts e templates prontos.</p>
-                <a href="{post['url_checkout']}" data-track="true" data-name="Ebook - {nome_rastreio}" data-category="Cursos & E-books" data-featured="false" target="_blank" class="cta-btn" style="background: var(--accent-purple); color: #fff;">Garantir E-book com Desconto</a>
+                <a href="{url_checkout}" data-track="true" data-name="Ebook - {nome_rastreio}" data-category="Cursos &amp; E-books" data-featured="false" target="_blank" rel="noopener noreferrer" class="cta-btn" style="background: var(--accent-purple); color: #fff;">Garantir E-book com Desconto</a>
             </div>
         """
 
@@ -95,15 +128,20 @@ def construir_html_premium(post):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{post['titulo']} | HubIA</title>
-    <meta name="description" content="{post['descricao']}">
+    <title>{titulo} | HubIA</title>
+    <meta name="description" content="{descricao}">
 
     <!-- META TAGS DE COMPARTILHAMENTO (LINKEDIN / OPEN GRAPH) -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="{url_completa_post}">
-    <meta property="og:title" content="{post['titulo']} | HubIA">
-    <meta property="og:description" content="{post['descricao']}">
+    <meta property="og:title" content="{titulo} | HubIA">
+    <meta property="og:description" content="{descricao}">
     <meta property="og:image" content="{dom_base}/assets/og-image-default.jpg">
+
+    <!--  SCHEMA MARKUP INJETADO VIA PYTHON (Google lê isso instantaneamente) -->
+    <script type="application/ld+json">
+    {schema}
+    </script>
 
     <style>
         :root {{
@@ -148,9 +186,9 @@ def construir_html_premium(post):
 <body>
 
     <article class="container">
-        <h1>{post['titulo']}</h1>
+        <h1>{titulo}</h1>
         <div class="meta-info">
-            <span>Categoria: <strong>{post['categoria']}</strong></span> | <span>Publicado em: {data_atual}</span>
+            <span>Categoria: <strong>{categoria}</strong></span> | <span>Publicado em: {data_atual}</span>
         </div>
         
         <div id="post-content" class="content">
@@ -190,7 +228,7 @@ def construir_html_premium(post):
     return html_template
 
 def salvar_html(slug, html_content):
-    pasta_destino = "blog"
+    pasta_destino = os.path.join(BASE_DIR, "blog")
     os.makedirs(pasta_destino, exist_ok=True)
     caminho_arquivo = os.path.join(pasta_destino, f"{slug}.html")
     with open(caminho_arquivo, "w", encoding="utf-8") as f:
@@ -199,7 +237,7 @@ def salvar_html(slug, html_content):
     return slug
 
 def injetar_card_na_listagem(post):
-    caminho_index = os.path.join("blog", "index.html")
+    caminho_index = os.path.join(BASE_DIR, "blog", "index.html")
     if not os.path.exists(caminho_index):
         return
 
@@ -231,7 +269,7 @@ def gerar_sitemap_xml():
     
     # Correção 2: Adicionada a declaração correta de namespace (xmlns) exigida pelo Google
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += '<urlset xmlns="http://sitemaps.org">\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     
     # URL da Home
     xml += f"  <url>\n    <loc>{dom_base}/</loc>\n    <priority>1.0</priority>\n  </url>\n"
@@ -239,14 +277,15 @@ def gerar_sitemap_xml():
     xml += f"  <url>\n    <loc>{dom_base}/blog</loc>\n    <priority>0.8</priority>\n  </url>\n"
     
     # Varre a pasta blog e adiciona dinamicamente TODOS os posts que existirem lá dentro
-    if os.path.exists("blog"):
-        for arquivo in os.listdir("blog"):
+    blog_dir = os.path.join(BASE_DIR, "blog")
+    if os.path.exists(blog_dir):
+        for arquivo in os.listdir(blog_dir):
             if arquivo.endswith(".html") and arquivo != "index.html":
                 slug_limpo = arquivo.replace(".html", "")
                 xml += f"  <url>\n    <loc>{dom_base}/blog/{slug_limpo}</loc>\n    <priority>0.6</priority>\n  </url>\n"
                 
     xml += "</urlset>"
-    with open("sitemap.xml", "w", encoding="utf-8") as f:
+    with open(os.path.join(BASE_DIR, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(xml)
     print("🚀 [SUCESSO] sitemap.xml atualizado na raiz do seu Frontend com Namespace correto!")
 
