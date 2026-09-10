@@ -20,7 +20,7 @@ def obter_dados_do_usuario():
     slug_limpo = slug_limpo.lower().replace(" ", "-")
     
     # 3. Remove QUALQUER caractere que não seja letra, número ou hífen (limpa de vez :, ?, !, @, etc.)
-    slug = re.sub(r'[^a-z0-9-]+', '-', slug_limpo).strip('-')
+    slug = re.sub(r'[^a-z0-9-]+', '-', slug_limpo).strip('-').replace("--", "-")
     if not slug:
         slug = "artigo"
     categoria = input("Digite a CATEGORIA (ex: Produtividade (IA), Cursos & E-books): ").strip()
@@ -43,13 +43,18 @@ def obter_dados_do_usuario():
         conteudo_normalizado = conteudo_normalizado.replace(marcador, f"\n\n{marcador}")
 
     paragrafos = [p.strip() for p in conteudo_normalizado.split('\n') if p.strip()]
-    
+
     linhas_texto = []
     for p in paragrafos:
+        # IGNORA LINHAS VAZIAS PARA EVITAR TAGS EM BRANCO NO HTML
+        if not p.strip() or p.strip() == '""' or p.strip() == '"':
+            continue
+            
         # Formatação inteligente para os blocos de comando em inglês
         if p.startswith('"') or p.startswith('"[Tone:') or p.startswith('Create a') or p.startswith('Act as a'):
-            prompt_limpo = p.strip('"')
-            linhas_texto.append(f'<pre><code>{escape(prompt_limpo, quote=False)}</code></pre>')
+            prompt_limpo = p.strip('"').strip()
+            if prompt_limpo: # Só adiciona se não estiver vazio
+                linhas_texto.append(f'<pre><code>"{escape(prompt_limpo, quote=False)}"</code></pre>')
         # Formatação inteligente para os títulos textuais
         elif p.startswith('PRIMEIRA') or p.startswith('SEGUNDA') or p.startswith('TERCEIRA') or p.startswith('PROMPT'):
             linhas_texto.append(f'<h3>{escape(p)}</h3>')
