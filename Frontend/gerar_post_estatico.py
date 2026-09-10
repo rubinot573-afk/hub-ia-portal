@@ -4,7 +4,7 @@ from html import escape
 
 def obter_dados_do_usuario():
     """Captura os dados do artigo tratando automaticamente palavras-chave textuais simples."""
-    print("✏️ --- PAINEL DE CRIAÇÃO DE ARTIGOS (HUBIA) ---")
+    print(" --- PAINEL DE CRIAÇÃO DE ARTIGOS (HUBIA) ---")
     
     titulo = input("Digite o TÍTULO do artigo: ").strip()
     slug = titulo.lower().replace(" ", "-").replace(":", "").replace("?", "").replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u").replace("ã", "a").replace("ç", "c")
@@ -12,17 +12,17 @@ def obter_dados_do_usuario():
     descricao_seo = input("Digite uma descrição curta (1 frase para o LinkedIn/Google): ").strip()
     
     caminho_txt = "artigo.txt"
-    print(f"\n📖 Lendo o conteúdo de '{caminho_txt}'...")
+    print(f"\n Lendo o conteúdo de '{caminho_txt}'...")
     
     if not os.path.exists(caminho_txt):
-        print(f"❌ [ERRO] O arquivo '{caminho_txt}' não foi encontrado!")
+        print(f" [ERRO] O arquivo '{caminho_txt}' não foi encontrado!")
         with open(caminho_txt, "w", encoding="utf-8") as f:
             f.write("Cole o texto aqui.")
             
     with open(caminho_txt, "r", encoding="utf-8") as f:
         conteudo_completo = f.read().strip()
     
-    # FATIADOR POR PALAVRAS: Usa termos simples em português para quebrar o texto
+    
     conteudo_normalizado = conteudo_completo
     for marcador in ["PRIMEIRA FERRAMENTA:", "SEGUNDA FERRAMENTA:", "TERCEIRA FERRAMENTA:", "PROMPT EXATO:", "Create a high-converting", "[Tone:", "Act as a"]:
         conteudo_normalizado = conteudo_normalizado.replace(marcador, f"\n\n{marcador}")
@@ -224,22 +224,31 @@ def injetar_card_na_listagem(post):
 
 
 def gerar_sitemap_xml():
+    """Varre as subpastas e atualiza o sitemap.xml para indexação imediata do Google."""
     print("🗺️ Reconstruindo sitemap.xml...")
-    dom_base = "https://vercel.app"
-    xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    xml += f"  <url>\n    <loc>{dom_base}/</loc>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n"
-    xml += f"  <url>\n    <loc>{dom_base}/blog</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
-
+    # Correção 1: Inserção do domínio real completo do HubIA
+    dom_base = "https://frontendia-blush.vercel.app"
+    
+    # Correção 2: Adicionada a declaração correta de namespace (xmlns) exigida pelo Google
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://sitemaps.org">\n'
+    
+    # URL da Home
+    xml += f"  <url>\n    <loc>{dom_base}/</loc>\n    <priority>1.0</priority>\n  </url>\n"
+    # URL da Listagem do Blog
+    xml += f"  <url>\n    <loc>{dom_base}/blog</loc>\n    <priority>0.8</priority>\n  </url>\n"
+    
+    # Varre a pasta blog e adiciona dinamicamente TODOS os posts que existirem lá dentro
     if os.path.exists("blog"):
         for arquivo in os.listdir("blog"):
             if arquivo.endswith(".html") and arquivo != "index.html":
                 slug_limpo = arquivo.replace(".html", "")
-                xml += f"  <url>\n    <loc>{dom_base}/blog/{slug_limpo}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n"
-
-    xml += "</urlset>\n"
+                xml += f"  <url>\n    <loc>{dom_base}/blog/{slug_limpo}</loc>\n    <priority>0.6</priority>\n  </url>\n"
+                
+    xml += "</urlset>"
     with open("sitemap.xml", "w", encoding="utf-8") as f:
         f.write(xml)
-    print("🚀 [SUCESSO] sitemap.xml updated!")
+    print("🚀 [SUCESSO] sitemap.xml atualizado na raiz do seu Frontend com Namespace correto!")
 
 
 if __name__ == "__main__":
