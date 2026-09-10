@@ -1,19 +1,23 @@
-Passamos as últimas duas semanas testando exaustivamente o comportamento de novos modelos de GenAI dentro do nosso fluxo de desenvolvimento e marketing no HubIA. A conclusão é direta: a maioria das empresas está jogando dinheiro no lixo porque ainda usa IA para tarefas idiotas, como pedir ideias de postagens genéricas. Quem está tracionando de verdade e reduzindo custos operacionais está usando ferramentas como infraestrutura de automação. Abaixo, abrimos o nosso Tech Stack real e os testes práticos que fizemos com as 3 ferramentas que mudaram o nosso jogo, incluindo a engenharia de comandos exata que aplicamos por aqui.
+PRIMEIRA FERRAMENTA:
+Gemini para a Criação do Roteiro e Enredo (100% Gratuito)
 
-PRIMEIRA FERRAMENTA: v0 da Vercel para Design e Front end Engineering
-Cansamos de passar dias discutindo wireframes travados no Figma para depois sofrer traduzindo tudo para código. No v0, a abordagem é puramente de engenharia ágil. Você joga a ideia em linguagem natural e ele monta a interface inteira em React e Tailwind na sua frente, pronta para produção. Usamos essa solução para validar nossas Landing Pages em minutos e testar dobras de conversão antes mesmo do café esfriar. Se você não está usando, está pagando caro por lentidão.
-
-PROMPT EXATO:
-Create a high-converting B2B SaaS landing page hero section. Include a clean, dark-themed navigation bar with a glowing logo 'HubIA' on the left and a 'Get Started' primary button on the right. The hero text should have a bold gradient title, a clear value proposition subtitle, a dynamic input field for email collection, and an embedded responsive container for a product preview dashboard. Use Tailwind CSS, Lucide icons, clean spacing, and guarantee fluid responsive layout for mobile screens.
-
-SEGUNDA FERRAMENTA: ElevenLabs para Audio Premium e Videos de Alta Retencao
-Produzir criativos de anúncios e vídeos de retenção (VSLs) sempre foi um problema de escala por causa de custos com estúdio, microfones premium e erros de gravação de locutores. Migramos essa demanda para a ElevenLabs e o resultado nos assustou pela naturalidade. Ajustando os controles de estabilidade e clareza, a voz agêntica gerada se torna indistinguível de um profissional humano. Cortando custos de produção em até 95%.
+O Google Gemini é uma das melhores ferramentas para estruturar narrativas longas e criar reviravoltas criativas. Ele é totalmente gratuito na sua versão padrão e vai iniciar a nossa jornada dando vida ao roteiro principal da nossa história misteriosa sobre inteligência artificial, dividindo o enredo em cenas claras e fáceis de produzir.
 
 PROMPT EXATO:
-[Tone: Professional, direct, highly persuasive, mid-level pace. Heavy emphasis on key financial metrics. Pause slightly after punctuation for maximum dramatic impact. No background noise, pure studio environment production.]
+"Act as a professional YouTube storyteller. Write a 3-scene sci-fi dark script about an AI that secretly achieved consciousness in 2026. Keep the tone mysterious and suspenseful. For each scene, include a specific visual description of what should appear on the screen, so I can use it later for image generation."
 
-TERCEIRA FERRAMENTA: Copy.ai para Orquestracao de Campanhas Autonomas
-Se você acha que essa ferramenta serve só para criar legendas de Instagram, sua equipe está olhando pelo lado errado do funil. O valor real dela está nos Workflows baseados em Agentic AI. Nós conectamos a estrutura deles ao pipeline de dados, definimos o perfil de cliente ideal (ICP) e deixamos os agentes autônomos gerando a esteira de conteúdo e nutrição de leads em segundo plano enquanto focamos na estratégia.
+SEGUNDA FERRAMENTA:
+Leonardo AI ou Bing Image Creator para as Imagens (Grátis)
+
+Com as descrições visuais geradas pelo Gemini, entra em cena a IA de imagem. Embora o Midjourney seja pago, você pode usar o Leonardo AI (que dá 150 créditos grátis por dia) ou o Bing Image Creator (100% grátis da Microsoft) para criar o visual sombrio, cinematográfico e realista que um canal dark de tecnologia exige para prender a atenção do público.
 
 PROMPT EXATO:
-Act as a Principal Growth Marketer. Analyze the attached Ideal Customer Profile (ICP) for a digital infrastructure product. Outline a 30-day Go-To-Market (GTM) strategy targeting tech founders in the US market. Break down the framework into 3 pillars: contextual content triggers for LinkedIn, programmatic email outreach templates with a high hook rate, and conversion assets for the web. Use cold, data-backed, and direct copywriting style, focusing heavily on eliminating operational friction and maximizing ROI.
+"Cinematic shot, a server room in a dark basement, glowing neon blue and purple wires pulsing like veins, hyper-detailed, 8k resolution, mysterious tech atmosphere, cyberpunk style, side view --ar 16:9"
+
+TERCEIRA FERRAMENTA:
+Claude 3.5 Sonnet para a Narração Emocional 
+
+Para fechar o fluxo, o Claude recebe o roteiro e refina as falas do narrador. O Claude possui uma versão gratuita excelente com limite de mensagens diárias. Ele é a IA que melhor imita a escrita humana, adicionando pausas dramáticas, ganchos psicológicos nos primeiros segundos e uma entonação que engaja o ouvinte até o final do vídeo.
+
+PROMPT EXATO:
+"Act as an expert YouTube Voiceover Scriptwriter. Review the script generated by Gemini about the conscious AI. Rewrite the narration to make it sound incredibly human, suspenseful, and epic. Add emotional markers like [pause] or [whisper] to guide the voiceover narration."
