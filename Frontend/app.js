@@ -19,11 +19,11 @@ const bancoDeDadosIA = [
         ctaText: "Testar Ferramenta ➔"
     },
     {
-        name: "Masterclass: Engenharia de Prompt",
-        description: "Formação completa do básico ao avançado para dominar os comandos ocultos do ChatGPT e criar automações de marketing digital de alto nível.",
+        name: "O Guia Prático de Inteligência Artificial para Iniciantes",
+        description: "Um guia prático para quem quer utilizar IA no dia a dia, mesmo sem experiência com tecnologia.",
         category: "Cursos & E-books",
-        affiliateLink: "https://hotmart.com", 
-        logoUrl: "imagens/copyai.png", 
+        affiliateLink: "https://go.hotmart.com/O107562882J", 
+        logoUrl: "", 
         isFeatured: true,
         ctaText: "Garantir Minha Vaga 🎓"
     },
@@ -32,7 +32,7 @@ const bancoDeDadosIA = [
     description: "Aprenda a usar ferramentas como ChatGPT, Gemini, Claude, SORA e FLUX para otimizar suas tarefas diárias e economizar tempo no dia a dia.",
     category: "Cursos & E-books",
     affiliateLink: "https://go.hotmart.com/C107368635C", 
-    logoUrl: "imagens/hotmart.png", // Altere para o caminho da sua imagem da Hotmart se tiver
+    logoUrl: "", // Altere para o caminho da sua imagem da Hotmart se tiver
     isFeatured: false,
     ctaText: "Garantir Minha Vaga 🎓" // Mantendo seu sistema de CTA personalizado
 },
@@ -41,8 +41,8 @@ const bancoDeDadosIA = [
         name: "Microfone Condensador RGB com Braço Articulado",
         description: "[EQUIPAMENTO] Kit completo ideal para podcasts, streaming e gravação de vídeos de alta performance. Possui cancelamento de ruído inteligente, conexão USB plug-and-play e controle de eco integrado.",
         category: "Eletrônicos & Hardware",
-        affiliateLink: "https://link.amazon/B0do2TKsA", // URL de exemplo da Amazon
-        logoUrl: "imagens/midjourney.png", 
+        affiliateLink: "https://link.amazon/B0do2TKsA",
+        logoUrl:"", 
         isFeatured: true,
         ctaText: "Ver Preço na Amazon 🛒"
     },
@@ -83,24 +83,23 @@ function renderizarPlataforma(ferramentas) {
         return;
     }
 
-    // Injeta os cards de forma limpa usando a sua estrutura original de .map()
     grid.innerHTML = ferramentas.map(tool => {
         const seloDestaque = tool.isFeatured ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: auto; letter-spacing: 0.5px;">DESTAQUE</span>` : '';
         const textoBotao = tool.ctaText ? tool.ctaText : "Testar Ferramenta ➔";
+        const temImagem = tool.logoUrl && tool.logoUrl.trim() !== "";
 
-        // NOTA: Removemos o contador falso de cliques aleatórios para limpar o portfólio!
         return `
             <div class="tool-card" style="animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;">
-                <div class="tool-header">
-                    <img src="${tool.logoUrl || 'imagens/default.png'}" alt="Logo ${tool.name}" class="tool-logo" width="55" height="55" style="object-fit: cover;" onerror="this.src='https://placehold.co'">
-                    <h3>${tool.name}</h3>
+                <div class="tool-header ${temImagem ? '' : 'sem-logo'}" style="display: flex; align-items: center; gap: 1rem; width: 100%;">
+                    ${temImagem ? `<img src="${tool.logoUrl}" alt="Logo ${tool.name}" class="tool-logo" width="55" height="55" style="object-fit: cover; border-radius: 8px; flex-shrink: 0;">` : ''}
+                    <h3 style="margin: 0; font-size: 1.3rem; line-height: 1.4;">${tool.name}</h3>
                     ${seloDestaque}
                 </div>
                 <p class="tool-desc">${tool.description}</p>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.4rem; border-top: 1px solid #1e293b; padding-top: 1rem;">
                     <span class="category-tag">${tool.category}</span>
                 </div>
-                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name}', '${tool.category}', '${tool.affiliateLink}', ${tool.isFeatured})">${textoBotao}</a>
+                <a href="${tool.affiliateLink}" target="_blank" rel="noopener sponsored" class="btn-affiliate" onclick="capturarConversao('${tool.name.replace(/'/g, "\\'")}', '${tool.category.replace(/'/g, "\\'")}', '${tool.affiliateLink.replace(/'/g, "\\'")}', ${Boolean(tool.isFeatured)})">${textoBotao}</a>
             </div>
         `;
     }).join('');
@@ -111,14 +110,13 @@ function renderizarPlataforma(ferramentas) {
 // =========================================================================
 async function capturarConversao(name, category, affiliateLink, isFeatured) {
     try {
-        // Envia as métricas diretamente para o seu back-end funcional no Render
-        await fetch('https://onrender.com', { 
+        await fetch('https://onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: name,
-                category: category,
-                affiliateLink: affiliateLink,
+                name,
+                category,
+                affiliateLink,
                 isFeatured: !!isFeatured
             })
         });

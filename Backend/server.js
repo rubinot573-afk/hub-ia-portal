@@ -8,30 +8,27 @@ require('dotenv').config();
 
 const app = express();
 
-// ==========================================
+
 // 1. CONFIGURAÇÃO DE INFRAESTRUTURA (RENDER)
-// ==========================================
-// O Render trabalha com proxies reversos. Sem essa linha, o Rate Limit vai
-// enxergar o IP do próprio Render, bloqueando todos os usuários legítimos juntos.
+
+
 app.set('trust proxy', 1);
 
-// ==========================================
+
 // 2. CONFIGURAÇÃO DE CORS RESTRITO
-// ==========================================
-// REMOVIDO: origin: '*' (Isso permitia que qualquer site roubasse dados da sua API).
-// Correção: Permitir apenas o seu front-end hospedado na Vercel.
+
+
 const corsOptions = {
-  origin: 'https://frontendia-blush.vercel.app', // Substitua pela sua URL real da Vercel
+  origin: 'https://frontendia-blush.vercel.app', 
   methods: ['GET', 'POST'],
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 
-// ==========================================
+ 
 // 3. SEGURANÇA DE CABEÇALHOS (HELMET)
-// ==========================================
-// Mantive as desativações de CSP e CORP que você definiu (úteis caso sua API sirva imagens externas),
-// mas o Helmet continua removendo cabeçalhos que revelam que você usa Express e Node.js.
+ 
+
 app.use(helmet({ 
   contentSecurityPolicy: false, 
   crossOriginResourcePolicy: false 
@@ -39,8 +36,7 @@ app.use(helmet({
 
 // ==========================================
 // 4. LIMITAÇÃO DE PAYLOAD E INPUTS
-// ==========================================
-// Perfeito! Protege contra ataques de negação de serviço (DoS) por envio de JSONs gigantes.
+
 app.use(express.json({ limit: '10kb' }));
 
 // Remove chaves maliciosas (como $ e .) enviadas no body ou query para evitar injeção NoSQL no Atlas.

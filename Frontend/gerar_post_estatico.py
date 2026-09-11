@@ -13,13 +13,10 @@ def obter_dados_do_usuario():
     
     titulo = input("Digite o TÍTULO do artigo: ").strip()
     
-    # 1. Remove todos os acentos e cedilhas de forma mágica (transforma 'ç' em 'c', 'ã' em 'a', etc.)
     slug_limpo = unicodedata.normalize('NFKD', titulo).encode('ascii', 'ignore').decode('utf-8')
     
-    # 2. Transforma em minúsculo e troca os espaços por hífens
     slug_limpo = slug_limpo.lower().replace(" ", "-")
     
-    # 3. Remove QUALQUER caractere que não seja letra, número ou hífen (limpa de vez :, ?, !, @, etc.)
     slug = re.sub(r'[^a-z0-9-]+', '-', slug_limpo).strip('-').replace("--", "-")
     if not slug:
         slug = "artigo"
@@ -46,16 +43,14 @@ def obter_dados_do_usuario():
 
     linhas_texto = []
     for p in paragrafos:
-        # IGNORA LINHAS VAZIAS PARA EVITAR TAGS EM BRANCO NO HTML
         if not p.strip() or p.strip() == '""' or p.strip() == '"':
             continue
             
-        # Formatação inteligente para os blocos de comando em inglês
         if p.startswith('"') or p.startswith('"[Tone:') or p.startswith('Create a') or p.startswith('Act as a'):
             prompt_limpo = p.strip('"').strip()
-            if prompt_limpo: # Só adiciona se não estiver vazio
+            if prompt_limpo: 
                 linhas_texto.append(f'<pre><code>"{escape(prompt_limpo, quote=False)}"</code></pre>')
-        # Formatação inteligente para os títulos textuais
+        
         elif p.startswith('PRIMEIRA') or p.startswith('SEGUNDA') or p.startswith('TERCEIRA') or p.startswith('PROMPT'):
             linhas_texto.append(f'<h3>{escape(p)}</h3>')
         else:
@@ -63,7 +58,7 @@ def obter_dados_do_usuario():
             
     conteudo_corpo = "\n        ".join(linhas_texto)
     
-    print("\n🔗 --- CONFIGURAÇÃO DE AFILIAÇÃO (Opcionais: Pressione ENTER para pular) ---")
+    print("\n --- CONFIGURAÇÃO DE AFILIAÇÃO (Opcionais: Pressione ENTER para pular) ---")
     url_partnerstack = input("Link de Afiliado (PartnerStack/Amazon) [ENTER para pular]: ").strip()
     
     nome_ferramenta = ""
@@ -238,7 +233,7 @@ def salvar_html(slug, html_content):
     caminho_arquivo = os.path.join(pasta_destino, f"{slug}.html")
     with open(caminho_arquivo, "w", encoding="utf-8") as f:
         f.write(html_content)
-    print(f"🚀 [SUCESSO] Artigo físico gerado: {caminho_arquivo}")
+    print(f" [SUCESSO] Artigo físico gerado: {caminho_arquivo}")
     return slug
 
 def injetar_card_na_listagem(post):
@@ -263,7 +258,7 @@ def injetar_card_na_listagem(post):
         conteudo_index = conteudo_index.replace('<section class="blog-grid">', f'<section class="blog-grid">\n{novo_card}')
         with open(caminho_index, "w", encoding="utf-8") as f:
             f.write(conteudo_index)
-        print(f"🎴 Card visual injetado em blog/index.html!")
+        print(f" Card visual injetado em blog/index.html!")
 
 
 def gerar_sitemap_xml():
