@@ -6,7 +6,7 @@ const bancoDeDadosIA = [
         category: "Produtividade (IA)",
         affiliateLink: "https://openai.com",
         logoUrl: "imagens/chatGPT.jpg",
-        isFeatured: true,
+        isFeatured: false,
         ctaText: "Testar Ferramenta ➔"
     },
     {
@@ -33,7 +33,7 @@ const bancoDeDadosIA = [
     category: "Cursos & E-books",
     affiliateLink: "https://go.hotmart.com/C107368635C", 
     logoUrl: "", // Altere para o caminho da sua imagem da Hotmart se tiver
-    isFeatured: false,
+    isFeatured: true,
     ctaText: "Garantir Minha Vaga 🎓" // Mantendo seu sistema de CTA personalizado
 },
     
@@ -46,6 +46,16 @@ const bancoDeDadosIA = [
         isFeatured: true,
         ctaText: "Ver Preço na Amazon 🛒"
     },
+
+    {
+  name: "Mouse Sem Fio Logitech M170",
+  description: "Conexão sem fio 2.4GHz Plug-and-Play com alcance de até 10 metros. Design ambidestro confortável, rolagem linha por linha e bateria com duração de até 12 meses. Compatível com Windows, Mac e Linux.",
+  category: "Eletrônicos & Hardware",
+  affiliateLink: "https://link.amazon/B00OnuFcL",
+  logoUrl:"",
+  isFeatured: true,
+  ctaText:"Ver preço na Amazon 🛒"
+},
     {
         name: "Copy.ai",
         description: "Automação total de copywriting. Gera legendas persuasivas para Instagram, TikTok e e-mails de vendas em alta escala.",
@@ -83,7 +93,13 @@ function renderizarPlataforma(ferramentas) {
         return;
     }
 
-    grid.innerHTML = ferramentas.map(tool => {
+    // 1. Aplica a ordenação: true (1) fica em primeiro, false (0) fica em segundo
+    const ferramentasOrdenadas = ferramentas.sort((a, b) => {
+        return (b.isFeatured === true ? 1 : 0) - (a.isFeatured === true ? 1 : 0);
+    });
+
+    // 2. Alimenta o innerHTML usando o novo array ordenado
+    grid.innerHTML = ferramentasOrdenadas.map(tool => {
         const seloDestaque = tool.isFeatured ? `<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 700; font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 6px; margin-left: auto; letter-spacing: 0.5px;">DESTAQUE</span>` : '';
         const textoBotao = tool.ctaText ? tool.ctaText : "Testar Ferramenta ➔";
         const temImagem = tool.logoUrl && tool.logoUrl.trim() !== "";
@@ -103,25 +119,35 @@ function renderizarPlataforma(ferramentas) {
             </div>
         `;
     }).join('');
-}
+} // 👈 CHAVE CORRIGIDA AQUI! Fechando a função renderizarPlataforma antes de começar as outras.
 
 // =========================================================================
 // 2. FUNÇÃO DE RASTREAMENTO REAL (CHAMADA PELO ONCLICK DO LINK)
 // =========================================================================
-async function capturarConversao(name, category, affiliateLink, isFeatured) {
+async function capturarConversao(nome, category = '', affiliateLink = '', isFeatured = false) {
+    const nomeFormatado = String(nome || 'Clique');
+    const categoriaFormatada = String(category || '');
+    const linkFormatado = String(affiliateLink || '');
+
+    let relatorio = JSON.parse(localStorage.getItem('hubia_analytics')) || {};
+    relatorio[nomeFormatado] = (relatorio[nomeFormatado] || 0) + 1;
+    localStorage.setItem('hubia_analytics', JSON.stringify(relatorio));
+    console.log(`📊 [CONVERSÃO LOCAL] Clique para: ${nomeFormatado}`);
+
     try {
         await fetch('https://onrender.com', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name,
-                category,
-                affiliateLink,
-                isFeatured: !!isFeatured
+                name: nomeFormatado,
+                category: categoriaFormatada,
+                affiliateLink: linkFormatado,
+                isFeatured: !!isFeatured,
+                action: 'click'
             })
         });
     } catch (error) {
-        console.error("Erro no rastreamento do portfólio:", error);
+        console.log('⚠️ Sincronização em segundo plano arquivada localmente.');
     }
 }
 
@@ -148,8 +174,9 @@ function verificarFiltros() {
         });
     });
 }
-// 3. ENGENHARIA DE BUSCA DINÂMICA
-function ativarBusca() {
+
+// 4. ENGENHARIA DE BUSCA DINÂMICA
+function activarBusca() {
     const input = document.getElementById('search-input');
     if (!input) return;
 
@@ -159,7 +186,7 @@ function ativarBusca() {
             t.name.toLowerCase().includes(termo) || 
             t.description.toLowerCase().includes(termo)
         );
-        
+
         if (termo !== "") {
             document.querySelectorAll('.badge').forEach(b => b.classList.remove('active'));
         } else {
@@ -168,25 +195,6 @@ function ativarBusca() {
         }
         renderizarPlataforma(filtradas);
     });
-}
-
-// 4. ANALYTICS DE CLIQUES (Métricas de CRO)
-async function capturarConversao(nome) {
-    let relatorio = JSON.parse(localStorage.getItem('hubia_analytics')) || {};
-    relatorio[nome] = (relatorio[nome] || 0) + 1;
-    localStorage.setItem('hubia_analytics', JSON.stringify(relatorio));
-    console.log(`📊 [CONVERSÃO LOCAL] Clique para: ${nome}`);
-
-    try {
-        const API_URL = 'https://onrender.com';
-        await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: nome, action: 'click' })
-        });
-    } catch (error) {
-        console.log('⚠️ Sincronização em segundo plano arquivada localmente.');
-    }
 }
 
 // 5. GERENCIADOR DE COOKIES E PREFERÊNCIAS (LGPD Avançado)
@@ -225,9 +233,15 @@ function gerenciarCookies() {
 }
 
 // INICIALIZAÇÃO DO ECOSSISTEMA (Sincronizado perfeitamente)
-document.addEventListener("DOMContentLoaded", () => {
+function initApp() {
     renderizarPlataforma(bancoDeDadosIA);
     verificarFiltros();
-    ativarBusca();
+    activarBusca();
     gerenciarCookies();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
