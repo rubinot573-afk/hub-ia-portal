@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Nome do Script: post_ia_lucrativa.py
-Descrição: Automação CLI que espelha exatamente a arquitetura da sua pasta /blog/.
-           Gera arquivos .html soltos diretamente dentro do diretório /ia-lucrativa/.
+Descrição: Automação CLI unificada com a mesma engenharia de String do seu blog.
+           Varre ambas as pastas (/blog e /ia-lucrativa) para gerar o sitemap.xml
+           perfeito e sem conflitos de namespace.
 Autor: Engenheiro de Software Sênior
 """
 
@@ -10,15 +11,15 @@ import os
 import sys
 import re
 from datetime import datetime
-import xml.etree.ElementTree as ET
 
 # --- CONFIGURAÇÕES GERAIS ---
-BASE_URL = "https://frontendia-blush.vercel.app"  # Substitua pelo seu domínio de produção
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_URL = "https://frontendia-blush.vercel.app"
 TXT_SOURCE = "lucrativa.txt"
-SITEMAP_FILE = "sitemap.xml"
-HOME_FILE = "index.html"  # Home principal da raiz
-HUB_DIR = "ia-lucrativa"   # Pasta central dos Infoprodutos
-HUB_FILE = os.path.join(HUB_DIR, "index.html") # Vitrine da aba
+SITEMAP_FILE = os.path.join(BASE_DIR, "sitemap.xml")
+HOME_FILE = os.path.join(BASE_DIR, "index.html")
+HUB_DIR = "ia-lucrativa"
+HUB_FILE = os.path.join(BASE_DIR, HUB_DIR, "index.html")
 
 
 def log_info(msg: str):
@@ -32,7 +33,6 @@ def log_error(msg: str):
 
 
 def format_text_to_paragraphs(text: str) -> str:
-    """Processa o texto bruto do TXT convertendo '##' em <h2> e gerando parágrafos curtos."""
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     html_elements = []
     current_para = []
@@ -57,7 +57,6 @@ def format_text_to_paragraphs(text: str) -> str:
 
 
 def generate_html_content(slug: str, title: str, headline: str, checkout_url: str, paragraphs_html: str) -> str:
-    """Retorna o HTML mobile-first limpo com botão neon para a página do e-book."""
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -154,33 +153,42 @@ def generate_html_content(slug: str, title: str, headline: str, checkout_url: st
 """
 
 
-def update_sitemap(sitemap_path: str, new_url: str):
-    """Atualiza o sitemap.xml."""
-    if not os.path.exists(sitemap_path):
-        raise FileNotFoundError(f"Sitemap não encontrado em: {sitemap_path}")
+def reconstruir_sitemap_completo():
+    """Gera o sitemap.xml do zero, lendo o Blog E a pasta IA Lucrativa juntos (Sem conflito)."""
+    print("🗺️ Reconstruindo sitemap.xml com Engenharia Unificada...")
+    
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    
+    # URLs Base Estáticas
+    xml += f"  <url>\n    <loc>{BASE_URL}/</loc>\n    <priority>1.0</priority>\n  </url>\n"
+    xml += f"  <url>\n    <loc>{BASE_URL}/blog</loc>\n    <priority>0.8</priority>\n  </url>\n"
+    xml += f"  <url>\n    <loc>{BASE_URL}/{HUB_DIR}</loc>\n    <priority>0.8</priority>\n  </url>\n"
+    
+    # 1. Varre e adiciona posts do Blog
+    blog_dir = os.path.join(BASE_DIR, "blog")
+    if os.path.exists(blog_dir):
+        for arquivo in os.listdir(blog_dir):
+            if arquivo.endswith(".html") and arquivo != "index.html":
+                slug_limpo = arquivo.replace(".html", "")
+                xml += f"  <url>\n    <loc>{BASE_URL}/blog/{slug_limpo}</loc>\n    <priority>0.6</priority>\n  </url>\n"
 
-    tree = ET.parse(sitemap_path)
-    root = tree.getroot()
-    ns_uri = root.tag[1:].split("}")[0] if root.tag.startswith("{") else ""
-    loc_path = f".//{{{ns_uri}}}loc" if ns_uri else ".//loc"
-    url_path = f"{{{ns_uri}}}url" if ns_uri else "url"
-
-    for loc in root.findall(loc_path):
-        if loc.text and loc.text.strip() == new_url:
-            return
-
-    url_element = ET.Element(url_path)
-    ET.SubElement(url_element, f"{{{ns_uri}}}loc" if ns_uri else "loc").text = new_url
-    ET.SubElement(url_element, f"{{{ns_uri}}}lastmod" if ns_uri else "lastmod").text = datetime.now().strftime("%Y-%m-%d")
-    ET.SubElement(url_element, f"{{{ns_uri}}}priority" if ns_uri else "priority").text = "0.8"
-    root.append(url_element)
-    ET.indent(tree, space="  ", level=0)
-    tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
-    log_success("Sitemap.xml atualizado.")
+    # 2. Varre e adiciona e-books da IA Lucrativa
+    ia_dir = os.path.join(BASE_DIR, HUB_DIR)
+    if os.path.exists(ia_dir):
+        for arquivo in os.listdir(ia_dir):
+            if arquivo.endswith(".html") and arquivo != "index.html":
+                slug_limpo = arquivo.replace(".html", "")
+                xml += f"  <url>\n    <loc>{BASE_URL}/{HUB_DIR}/{slug_limpo}</loc>\n    <priority>0.6</priority>\n  </url>\n"
+                
+    xml += "</urlset>"
+    
+    with open(SITEMAP_FILE, "w", encoding="utf-8") as f:
+        f.write(xml)
+    log_success("Sitemap.xml reconstruído e unificado com sucesso total!")
 
 
 def update_main_home_nav(home_path: str, hub_slug: str):
-    """Garante que o botão do menu principal aponte estático para a aba /ia-lucrativa/."""
     if not os.path.exists(home_path):
         return
     with open(home_path, "r", encoding="utf-8") as f:
@@ -195,24 +203,27 @@ def update_main_home_nav(home_path: str, hub_slug: str):
     if f"href='/{hub_slug}'" in content or f'href="/{hub_slug}"' in content or f"/{hub_slug}/" in content:
         return
 
-    hub_button_html = f"""
-            <a href="/{hub_slug}" style="background: linear-gradient(135deg, rgba(0, 255, 102, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); color: #00ff66; font-weight: 600; text-decoration: none; font-size: 0.95rem; padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(0, 255, 102, 0.2); transition: all 0.2s;" onmouseover="this.style.color='#FFF'; this.style.borderColor='#A855F7';" onmouseout="this.style.color='#00ff66'; this.style.borderColor='rgba(0, 255, 102, 0.2)';" style="margin-right: 8px;">
+        hub_button_html = f"""
+            <a href="/{hub_slug}" style="background: linear-gradient(135deg, rgba(0, 255, 102, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); color: #00ff66; font-weight: 600; text-decoration: none; font-size: 0.95rem; padding: 6px 14px; margin-right: 8px; border-radius: 6px; border: 1px solid rgba(0, 255, 102, 0.2); transition: all 0.2s;" onmouseover="this.style.color='#FFF'; this.style.borderColor='#A855F7';" onmouseout="this.style.color='#00ff66'; this.style.borderColor='rgba(0, 255, 102, 0.2)';">
                 🚀 IA Lucrativa
             </a>"""
 
-    pattern = f"{start_tag}(.*?){end_tag}"
-    replacement = f"{start_tag}\\1{hub_button_html}\n{end_tag}"
-    updated_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+    pattern = re.escape(start_tag) + r"(.*?)" + re.escape(end_tag)
+    updated_content = re.sub(
+        pattern,
+        lambda match: f"{start_tag}{match.group(1)}{hub_button_html}\n{end_tag}",
+        content,
+        count=1,
+        flags=re.DOTALL,
+    )
 
     with open(home_path, "w", encoding="utf-8") as f:
         f.write(updated_content)
-    log_success("Botão da aba central 'IA Lucrativa' verificado no menu principal.")
+    log_success("Botão da barra de navegação principal configurado.")
 
 
-def update_hub_showcase(hub_path: str, book_slug: str, title: str):
-    """Injeta o link do novo e-book (.html) dentro da página vitrine da aba /ia-lucrativa/index.html."""
+def update_hub_showcase(hub_path: str, book_slug: str, title: str, headline: str):
     if not os.path.exists(hub_path):
-        log_info(f"Página de vitrine do hub ({hub_path}) não encontrada. Pulei listagem interna.")
         return
 
     with open(hub_path, "r", encoding="utf-8") as f:
@@ -222,78 +233,72 @@ def update_hub_showcase(hub_path: str, book_slug: str, title: str):
     end_tag = "<!-- INJECT_PRODUCT_BUTTONS_END -->"
 
     if start_tag not in content or end_tag not in content:
-        log_error(f"Tags de ancoragem não encontradas em {hub_path} para listar o e-book.")
         return
 
     if f"{book_slug}.html" in content:
-        log_info(f"O e-book {book_slug}.html já está listado na vitrine do Hub.")
         return
 
-    # IMPORTANTE: Agora aponta para o arquivo .html solto na pasta, igual ao blog!
-    new_book_link = f"""
-        <div class="book-card" style="margin-bottom: 15px; padding: 15px; background: #161b22; border-radius: 8px; border: 1px solid #21262d;">
-            <h3 style="color: #fff; margin-bottom: 5px;">{title}</h3>
-            <a href="/{HUB_DIR}/{book_slug}.html" style="color: #00ff66; font-weight: 600; text-decoration: none; font-size: 0.9rem;">Ver detalhes do e-book →</a>
-        </div>
-    """
+    new_card_html = f"""
+            <!-- CARD AUTOMÁTICO: {title} -->
+            <a href="/{HUB_DIR}/{book_slug}.html" class="blog-card">
+                <div>
+                    <span class="category-badge">E-book (IA)</span>
+                    <h3>{title}</h3>
+                    <p>{headline}</p>
+                </div>
+            </a>"""
 
-    pattern = f"{start_tag}(.*?){end_tag}"
-    replacement = f"{start_tag}\1{new_book_link}\n{end_tag}"
-    updated_content = re.sub(pattern, replacement, content, flags=re.DOTALL)
+    pattern = re.escape(start_tag) + r"(.*?)" + re.escape(end_tag)
+    updated_content = re.sub(
+        pattern,
+        lambda match: f"{start_tag}{match.group(1)}{new_card_html}\n{end_tag}",
+        content,
+        count=1,
+        flags=re.DOTALL,
+    )
 
     with open(hub_path, "w", encoding="utf-8") as f:
         f.write(updated_content)
-
-    log_success(f"E-book '{title}' listado na vitrine do seu Hub como {book_slug}.html")
+    log_success("Card do e-book criado com sucesso na vitrine!")
 
 
 def main():
-    print("\n🚀 \033[1;95mGERENCIADOR DE ECOSSISTEMA - ESTILO BLOG\033[0m 🚀\n")
+    print("\n🚀 \033[1;95mGERENCIADOR DE ECOSSISTEMA UNIFICADO\033[0m 🚀\n")
 
-    if not os.path.exists(TXT_SOURCE):
-        log_error(f"Arquivo '{TXT_SOURCE}' não encontrado.")
+    caminho_txt = os.path.join(BASE_DIR, TXT_SOURCE)
+    if not os.path.exists(caminho_txt):
+        log_error(f"Arquivo '{caminho_txt}' não encontrado.")
         sys.exit(1)
 
-    with open(TXT_SOURCE, "r", encoding="utf-8") as f:
+    with open(caminho_txt, "r", encoding="utf-8") as f:
         raw_text = f.read()
 
     book_slug = input("👉 Digite o SLUG DO E-BOOK (ex: menos-teoria-mais-sistema): ").strip().lower()
-    book_slug = re.sub(r'[^a-z0-9-]', '', book_slug)
+    book_slug = re.sub(r"[^a-z0-9-]", "", book_slug)
     if not book_slug:
-        log_error("Slug inválido.")
         sys.exit(1)
 
     title = input("👉 Digite o TÍTULO COMPLETO do e-book: ").strip()
     headline = input("👉 Digite a FRASE DE EFEITO (Headline): ").strip()
     checkout_url = input("👉 Digite o LINK DE CHECKOUT da Hotmart: ").strip()
-
-    if not all([title, headline, checkout_url]):
-        log_error("Todos os campos são obrigatórios.")
-        sys.exit(1)
-
-    # NOVO DESTINO: Gera ia-lucrativa/menos-teoria-mais-sistema.html (Estilo o seu Blog!)
-    target_html = os.path.join(os.getcwd(), HUB_DIR, f"{book_slug}.html")
-    new_page_url = f"{BASE_URL}/{HUB_DIR}/{book_slug}.html"
+    target_html = os.path.join(BASE_DIR, HUB_DIR, f"{book_slug}.html")
 
     try:
         paragraphs_html = format_text_to_paragraphs(raw_text)
-        final_html = generate_html_content(book_slug, title, headline, checkout_url, paragraphs_html)
-
-        # 1. Ajusta Navegação Inicial
+        final_html = generate_html_content(
+            book_slug, title, headline, checkout_url, paragraphs_html
+        )
         update_main_home_nav(HOME_FILE, HUB_DIR)
+        update_hub_showcase(HUB_FILE, book_slug, title, headline)
 
-        # 2. Injeta link com extensão .html no Hub Central
-        update_hub_showcase(HUB_FILE, book_slug, title)
-
-        # 3. Salva no Sitemap com a extensão .html
-        update_sitemap(SITEMAP_FILE, new_page_url)
-
-        # 4. Garante que a pasta ia-lucrativa existe e escreve o arquivo .html solto
-        os.makedirs(HUB_DIR, exist_ok=True)
+        os.makedirs(os.path.join(BASE_DIR, HUB_DIR), exist_ok=True)
         with open(target_html, "w", encoding="utf-8") as f:
             f.write(final_html)
 
-        log_success(f"SUCESSO! Página gerada exatamente no padrão do seu blog em: /{HUB_DIR}/{book_slug}.html")
+        reconstruir_sitemap_completo()
+        log_success(
+            f"Lançamento concluído com sucesso total! Arquivo: /{HUB_DIR}/{book_slug}.html"
+        )
     except Exception as e:
         log_error(f"Erro ao processar: {e}")
         sys.exit(1)

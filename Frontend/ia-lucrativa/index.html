@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-books Estratégicos | IA Lucrativa</title>
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-dark: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --accent-glow: #00ff66; /* Verde Neon Lucrativo */
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: #FFF; }
+        p.subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; }
+        
+        /* Grid de Infoprodutos */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .blog-card {
+            background-color: var(--card-dark);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-glow);
+        }
+        .category-badge {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-glow);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            align-self: flex-start;
+            margin-bottom: 15px;
+        }
+        .blog-card h3 { margin: 0 0 10px 0; font-size: 1.3rem; color: #FFF; }
+        .blog-card p { margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1>Central de E-books IA Lucrativa</h1>
+        <p class="subtitle">Construa sistemas autônomos, monetize seus scripts e escale sua receita.</p>
+
+        <section class="blog-grid">
+<!-- INJECT_PRODUCT_BUTTONS_START --> 
+
+            <!-- CARD AUTOMÁTICO: Manual da IA Lucrativa: Construa, Divulgue e Venda seu Primeiro Infoproduto de Tecnologia nas Horas Vagas -->
+            <a href="/ia-lucrativa/menos-teoria-mais-sistema.html" class="blog-card">
+                <div>
+                    <span class="category-badge">E-book (IA)</span>
+                    <h3>Manual da IA Lucrativa: Construa, Divulgue e Venda seu Primeiro Infoproduto de Tecnologia nas Horas Vagas</h3>
+                    <p>O plano prático para criar e vender seu primeiro infoproduto sem precisar largar seu emprego atual.</p>
+                </div>
+            </a>
+<!-- INJECT_PRODUCT_BUTTONS_END -->
+        </section>
+    </main>
+
+</body>
+</html>
