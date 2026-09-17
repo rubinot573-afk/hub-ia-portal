@@ -222,7 +222,62 @@ def construir_html_premium(post):
             }}
         }});
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {{
+            document.querySelectorAll('pre code').forEach((codeBlock) => {{
+                const preContainer = codeBlock.parentElement;
+                if (!preContainer || preContainer.querySelector('.copy-prompt-button')) return;
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'copy-prompt-button';
+                button.innerText = 'Copiar Prompt 📋';
+                
+                button.style.cssText = 'position: absolute; right: 12px; top: 12px; background: #00b4d8; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3); transition: all 0.2s ease-in-out; z-index: 10;';
+
+                preContainer.style.position = 'relative';
+                preContainer.appendChild(button);
+
+                button.addEventListener('mouseenter', () => {{ button.style.background = '#0077b6'; }});
+                button.addEventListener('mouseleave', () => {{ button.style.background = '#00b4d8'; }});
+
+                button.addEventListener('click', async () => {{
+                    const textoLimpo = codeBlock.innerText.replace(/^"|"$/g, '').trim();
+                    try {{
+                        if (navigator.clipboard && window.isSecureContext) {{
+                            await navigator.clipboard.writeText(textoLimpo);
+                        }} else {{
+                            const textarea = document.createElement('textarea');
+                            textarea.value = textoLimpo;
+                            textarea.setAttribute('readonly', '');
+                            textarea.style.position = 'fixed';
+                            textarea.style.opacity = '0';
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            if (!document.execCommand('copy')) throw new Error('Copy failed');
+                            textarea.remove();
+                        }}
+                        button.innerText = 'Copiado! ✓';
+                        button.style.background = '#2a9d8f';
+                        button.style.boxShadow = '0 4px 10px rgba(42, 157, 143, 0.4)';
+                        
+                        setTimeout(() => {{
+                            button.innerText = 'Copiar Prompt 📋';
+                            button.style.background = '#00b4d8';
+                            button.style.boxShadow = '0 4px 10px rgba(0, 180, 216, 0.3)';
+                        }}, 2000);
+                    }} catch (error) {{
+                        button.innerText = 'Falha ao copiar';
+                        setTimeout(() => {{ button.innerText = 'Copiar Prompt 📋'; }}, 2000);
+                    }}
+                }});
+            }});
+        }});
+    </script>
+    
 </body>
+
 </html>
 """
     return html_template

@@ -10,6 +10,7 @@ Autor: Engenheiro de Software Sênior
 import os
 import sys
 import re
+import json
 from datetime import datetime
 
 # --- CONFIGURAÇÕES GERAIS ---
@@ -57,6 +58,34 @@ def format_text_to_paragraphs(text: str) -> str:
 
 
 def generate_html_content(slug: str, title: str, headline: str, checkout_url: str, paragraphs_html: str) -> str:
+    schema_data = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Product",
+                "name": title,
+                "description": "Aprenda o passo a passo prático para criar, estruturar e vender seu primeiro infoproduto nas suas horas vagas usando Inteligência Artificial.",
+                "image": f"/img/{slug}.png",
+                "author": {"@type": "Person", "name": "Rafa Silva"},
+                "offers": {
+                    "@type": "Offer",
+                    "price": "29.90",
+                    "priceCurrency": "BRL",
+                    "url": checkout_url,
+                       "availability": "https://schema.org/InStock"
+                }
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {"@type": "Question", "name": "Como recebo o conteúdo?", "acceptedAnswer": {"@type": "Answer", "text": "Imediatamente após a aprovação do pagamento, você receberá os dados de acesso direto no seu e-mail."}},
+                    {"@type": "Question", "name": "O formato é amigável para leitura?", "acceptedAnswer": {"@type": "Answer", "text": "Sim, o e-book foi totalmente diagramado e otimizado para leitura confortável em smartphones, tablets e computadores."}},
+                    {"@type": "Question", "name": "Possui garantia?", "acceptedAnswer": {"@type": "Answer", "text": "Sim, você tem garantia incondicional de 7 dias assegurada pela Hotmart."}}
+                ]
+            }
+        ]
+    }, ensure_ascii=False).replace("<", "\\u003c")
+
     return f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -148,7 +177,68 @@ def generate_html_content(slug: str, title: str, headline: str, checkout_url: st
             </div>
         </section>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {{
+            const schemaData = {schema_data};
+            /*
+                    {{
+                        "@type": "Product",
+                        "name": "{title}",
+                        "description": "Aprenda o passo a passo prático para criar, estruturar e vender seu primeiro infoproduto nas suas horas vagas usando Inteligência Artificial.",
+                        "image": window.location.origin + "/img/{slug}.png",
+                        "author": {{
+                            "@type": "Person",
+                            "name": "Rafa Silva"
+                        }},
+                        "offers": {{
+                            "@type": "Offer",
+                            "price": "29.90",
+                            "priceCurrency": "BRL",
+                            "url": "{checkout_url}",
+                            "availability": "https://schema.org"
+                        }}
+                    }},
+                    {{
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {{
+                                "@type": "Question",
+                                "name": "Como recebo o conteúdo?",
+                                "acceptedAnswer": {{
+                                    "@type": "Answer",
+                                    "text": "Imediatamente após a aprovação do pagamento, você receberá os dados de acesso direto no seu e-mail."
+                                }}
+                            }},
+                            {{
+                                "@type": "Question",
+                                "name": "O formato é amigável para leitura?",
+                                "acceptedAnswer": {{
+                                    "@type": "Answer",
+                                    "text": "Sim, o e-book foi totalmente diagramado e otimizado para leitura confortável em smartphones, tablets e computadores."
+                                }}
+                            }},
+                            {{
+                                "@type": "Question",
+                                "name": "Possui garantia?",
+                                "acceptedAnswer": {{
+                                    "@type": "Answer",
+                                    "text": "Sim, você tem garantia incondicional de 7 dias assegurada pela Hotmart."
+                                }}
+                            }}
+                        ]
+                    }}
+                ]
+            */
+
+            const scriptSchema = document.createElement('script');
+            scriptSchema.type = 'application/ld+json';
+            scriptSchema.text = JSON.stringify(schemaData);
+            document.head.appendChild(scriptSchema);
+        }});
+    </script>
 </body>
+
 </html>
 """
 
@@ -203,7 +293,7 @@ def update_main_home_nav(home_path: str, hub_slug: str):
     if f"href='/{hub_slug}'" in content or f'href="/{hub_slug}"' in content or f"/{hub_slug}/" in content:
         return
 
-        hub_button_html = f"""
+    hub_button_html = f"""
             <a href="/{hub_slug}" style="background: linear-gradient(135deg, rgba(0, 255, 102, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); color: #00ff66; font-weight: 600; text-decoration: none; font-size: 0.95rem; padding: 6px 14px; margin-right: 8px; border-radius: 6px; border: 1px solid rgba(0, 255, 102, 0.2); transition: all 0.2s;" onmouseover="this.style.color='#FFF'; this.style.borderColor='#A855F7';" onmouseout="this.style.color='#00ff66'; this.style.borderColor='rgba(0, 255, 102, 0.2)';">
                 🚀 IA Lucrativa
             </a>"""
