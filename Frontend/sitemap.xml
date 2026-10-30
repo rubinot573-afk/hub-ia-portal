@@ -25,6 +25,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://frontendia-blush.vercel.app/blog/como-evitar-que-o-n8n-e-o-postgresql-travem-com-pdfs-pesados-no-ollama</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://frontendia-blush.vercel.app/blog/como-rodar-ias-em-larga-escala-sem-explodir-os-custos-operacionais-make-vs-zapier</loc>
     <priority>0.6</priority>
   </url>
