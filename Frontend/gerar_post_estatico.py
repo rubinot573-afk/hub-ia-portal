@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def obter_dados_do_usuario():
     """Captura os dados do artigo tratando automaticamente palavras-chave textuais simples."""
-    print(" --- PAINEL DE CRIAÇÃO DE ARTIGOS (HUBIA) ---")
+    print(" --- PAINEL DE CRIAÇÃO DE ARTIGOS (PolarLab) ---")
     
     titulo = input("Digite o TÍTULO do artigo: ").strip()
     
@@ -98,7 +98,7 @@ def construir_html_premium(post):
         "datePublished": datetime.date.today().isoformat(),
         "url": url_completa_post,
         "author": {"@type": "Person", "name": "Rafael"},
-        "publisher": {"@type": "Organization", "name": "HubIA",
+        "publisher": {"@type": "Organization", "name": "PolarLab",
                       "logo": {"@type": "ImageObject", "url": f"{dom_base}/assets/logo.png"}}
     }, ensure_ascii=False)
 
@@ -114,7 +114,7 @@ def construir_html_premium(post):
 
     cta_checkout_html = ""
     if post['url_checkout']:
-        nome_rastreio = post['nome_item'] if post['nome_item'] else "Guia HubIA"
+        nome_rastreio = post['nome_item'] if post['nome_item'] else "Guia PolarLab"
         cta_checkout_html = f"""
             <div class="cta-container" style="border-color: var(--accent-glow);">
                 <h3>Quer acelerar seus resultados com IA?</h3>
@@ -128,13 +128,13 @@ def construir_html_premium(post):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{titulo} | HubIA</title>
+    <title>{titulo} | PolarLab</title>
     <meta name="description" content="{descricao}">
 
     <!-- META TAGS DE COMPARTILHAMENTO (LINKEDIN / OPEN GRAPH) -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="{url_completa_post}">
-    <meta property="og:title" content="{titulo} | HubIA">
+    <meta property="og:title" content="{titulo} | PolarLab">
     <meta property="og:description" content="{descricao}">
     <meta property="og:image" content="{dom_base}/assets/og-image-default.jpg">
 
@@ -319,7 +319,7 @@ def injetar_card_na_listagem(post):
 def gerar_sitemap_xml():
     """Varre as subpastas e atualiza o sitemap.xml para indexação imediata do Google."""
     print("🗺️ Reconstruindo sitemap.xml...")
-    # Correção 1: Inserção do domínio real completo do HubIA
+    # Correção 1: Inserção do domínio real completo do PolarLab
     dom_base = "https://frontendia-blush.vercel.app"
     
     # Correção 2: Adicionada a declaração correta de namespace (xmlns) exigida pelo Google
