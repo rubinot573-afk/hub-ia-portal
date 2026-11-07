@@ -56,7 +56,7 @@ const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-// Aplica o limitador estritamente nas rotas de ferramentas do HubIA
+// Aplica o limitador estritamente nas rotas de ferramentas do Polarlab
 app.use('/api', apiLimiter);
 
 // ==========================================
@@ -72,7 +72,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/portal-ia-b
 const toolRoutes = require('./routes/toolRoutes'); 
 app.use('/api', toolRoutes);
 
-app.get('/', (req, res) => res.send('API HubIA ativa.'));
+app.get('/', (req, res) => res.send('API Polarlab ativa.'));
 
 // ==========================================
 // 8. INICIALIZAÇÃO DO MOTOR
