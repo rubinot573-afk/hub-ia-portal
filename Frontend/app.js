@@ -129,9 +129,9 @@ async function capturarConversao(nome, category = '', affiliateLink = '', isFeat
     const categoriaFormatada = String(category || '');
     const linkFormatado = String(affiliateLink || '');
 
-    let relatorio = JSON.parse(localStorage.getItem('hubia_analytics')) || {};
+    let relatorio = JSON.parse(localStorage.getItem('PolarLab_analytics')) || {};
     relatorio[nomeFormatado] = (relatorio[nomeFormatado] || 0) + 1;
-    localStorage.setItem('hubia_analytics', JSON.stringify(relatorio));
+    localStorage.setItem('PolarLab_analytics', JSON.stringify(relatorio));
     console.log(`📊 [CONVERSÃO LOCAL] Clique para: ${nomeFormatado}`);
 
     try {
@@ -207,7 +207,7 @@ function gerenciarCookies() {
 
     if (!cookieBar || !btnAccept || !btnConfig || !cookieOptions) return;
 
-    if (localStorage.getItem('hubia_cookies_aceito') === 'true') {
+    if (localStorage.getItem('PolarLab_cookies_aceito') === 'true') {
         cookieBar.style.display = 'none';
     }
 
@@ -222,9 +222,9 @@ function gerenciarCookies() {
     });
 
     btnAccept.addEventListener('click', () => {
-        localStorage.setItem('hubia_cookies_aceito', 'true');
+        localStorage.setItem('PolarLab_cookies_aceito', 'true');
         const aceitouAnalytics = checkAnalytics ? checkAnalytics.checked : true;
-        localStorage.setItem('hubia_permitir_analytics', aceitouAnalytics);
+        localStorage.setItem('PolarLab_permitir_analytics', aceitouAnalytics);
 
         cookieBar.style.transition = 'all 0.3s ease';
         cookieBar.style.opacity = '0';
