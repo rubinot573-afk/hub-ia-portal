@@ -7,7 +7,7 @@
       "has": [
         {
           "type": "host",
-          "value": "https://frontendia-blush.vercel.app/"
+          "value": "frontendia-blush.vercel.app"
         }
       ],
       "destination": "https://polarlab.com.br*",
