@@ -81,7 +81,7 @@ def obter_dados_do_usuario():
 def construir_html_premium(post):
     """Gera o código HTML com suporte a blocos de código e Meta Tags do LinkedIn."""
     data_atual = datetime.date.today().strftime("%d/%m/%Y")
-    dom_base = "https://frontendia-blush.vercel.app"
+    dom_base = "https://www.polarlab.com.br/"
     url_completa_post = f"{dom_base}/blog/{post['slug']}"
 
     titulo = escape(post['titulo'])
@@ -320,7 +320,7 @@ def gerar_sitemap_xml():
     """Varre as subpastas e atualiza o sitemap.xml para indexação imediata do Google."""
     print("🗺️ Reconstruindo sitemap.xml...")
     # Correção 1: Inserção do domínio real completo do PolarLab
-    dom_base = "https://frontendia-blush.vercel.app"
+    dom_base = "https://www.polarlab.com.br/"
     
     # Correção 2: Adicionada a declaração correta de namespace (xmlns) exigida pelo Google
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'

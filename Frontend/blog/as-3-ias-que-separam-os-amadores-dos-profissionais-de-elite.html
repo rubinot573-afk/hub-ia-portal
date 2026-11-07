@@ -8,10 +8,10 @@
 
     <!-- META TAGS DE COMPARTILHAMENTO (LINKEDIN / OPEN GRAPH) -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://vercel.app/blog/as-3-ias-que-separam-os-amadores-dos-profissionais-de-elite">
+    <meta property="og:url" content="https://www.polarlab.com.br/blog/as-3-ias-que-separam-os-amadores-dos-profissionais-de-elite">
     <meta property="og:title" content="As 3 IAs que Separam os Amadores dos Profissionais de Elite | PolarLab">
     <meta property="og:description" content="Esqueça os prompts genéricos. Conheça o Tech Stack agêntico real para pulverizar custos operacionais.">
-    <meta property="og:image" content="https://vercel.app/assets/og-image-default.jpg">
+    <meta property="og:image" content="https://www.polarlab.com.br/assets/og-image-default.jpg">
 
     <style>
         :root {
@@ -99,7 +99,7 @@
                 if (navigator.sendBeacon) {
                     const headers = { type: 'application/json' };
                     const payload = new Blob([JSON.stringify({ name: name, category: category, affiliateLink: affiliateLink, isFeatured: isFeatured })], headers);
-                    navigator.sendBeacon('https://seu-backend-render.com', payload);
+                    navigator.sendBeacon('https://hub-ia-portal-1.onrender.com', payload);
                 }
             }
         });

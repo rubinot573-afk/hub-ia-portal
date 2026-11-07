@@ -15,7 +15,7 @@ from datetime import datetime
 
 # --- CONFIGURAÇÕES GERAIS ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_URL = "https://frontendia-blush.vercel.app"
+BASE_URL = "https://www.polarlab.com.br/"
 TXT_SOURCE = "lucrativa.txt"
 SITEMAP_FILE = os.path.join(BASE_DIR, "sitemap.xml")
 HOME_FILE = os.path.join(BASE_DIR, "index.html")
