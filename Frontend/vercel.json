@@ -10,7 +10,7 @@
           "value": "frontendia-blush.vercel.app"
         }
       ],
-      "destination": "https://polarlab.com.br*",
+      "destination": "https://www.polarlab.com.br/:path*",
       "permanent": true
     }
   ],
