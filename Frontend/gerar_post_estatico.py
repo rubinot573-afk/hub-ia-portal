@@ -230,14 +230,15 @@ def construir_html_premium(post):
                 if (!preContainer || preContainer.querySelector('.copy-prompt-button')) return;
 
                 const button = document.createElement('button');
-                button.type = 'button';
-                button.className = 'copy-prompt-button';
-                button.innerText = 'Copiar Prompt 📋';
-                
-                button.style.cssText = 'position: absolute; right: 12px; top: 12px; background: #00b4d8; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3); transition: all 0.2s ease-in-out; z-index: 10;';
+button.type = 'button';
+button.className = 'copy-prompt-button';
+button.innerText = 'Copiar Prompt 📋';
 
-                preContainer.style.position = 'relative';
-                preContainer.appendChild(button);
+button.style.cssText = 'position: absolute; right: 12px; top: 12px; background: #00b4d8; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3); transition: all 0.2s ease-in-out; z-index: 10;';
+
+preContainer.style.position = 'relative';
+preContainer.style.paddingTop = '48px';
+preContainer.appendChild(button);
 
                 button.addEventListener('mouseenter', () => {{ button.style.background = '#0077b6'; }});
                 button.addEventListener('mouseleave', () => {{ button.style.background = '#00b4d8'; }});
