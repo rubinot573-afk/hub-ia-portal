@@ -19,7 +19,7 @@ app.set('trust proxy', 1);
 
 
 const corsOptions = {
-  origin: 'https://polarlab.com.br', 
+  origin: 'https://www.polarlab.com.br/', 
   methods: ['GET', 'POST'],
   optionsSuccessStatus: 200
 };
