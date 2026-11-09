@@ -1,51 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://polarlab.com.br/</loc>
+    <loc>https://www.polarlab.com.br//</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog</loc>
+    <loc>https://www.polarlab.com.br//blog</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/alem-do-copilot-as-4-melhores-ias-locais-para-programacao-que-respeitam-sua-privacidade</loc>
+    <loc>https://www.polarlab.com.br//blog/alem-do-copilot-as-4-melhores-ias-locais-para-programacao-que-respeitam-sua-privacidade</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/as-3-ias-que-separam-os-amadores-dos-profissionais-de-elite</loc>
+    <loc>https://www.polarlab.com.br//blog/as-3-ias-que-separam-os-amadores-dos-profissionais-de-elite</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/como-criar-um-canal-dark-conectando-3-ias-100-gratis-roteiro-imagem-e-voz</loc>
+    <loc>https://www.polarlab.com.br//blog/como-conectar-agentes-de-ia-locais-a-bancos-de-dados-via-mcp-e-docker-com-seguranca-total</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/como-criar-um-infoproduto-com-inteligencia-artificial-nas-horas-vagas-o-guia-definitivo-sem-enrolacao-teorica</loc>
+    <loc>https://www.polarlab.com.br//blog/como-criar-um-canal-dark-conectando-3-ias-100-gratis-roteiro-imagem-e-voz</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/como-evitar-que-o-n8n-e-o-postgresql-travem-com-pdfs-pesados-no-ollama</loc>
+    <loc>https://www.polarlab.com.br//blog/como-criar-um-infoproduto-com-inteligencia-artificial-nas-horas-vagas-o-guia-definitivo-sem-enrolacao-teorica</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/como-migrar-do-make-para-o-n8n-self-hosted-em-vps-docker-para-reduzir-custos-de-automacao</loc>
+    <loc>https://www.polarlab.com.br//blog/como-evitar-que-o-n8n-e-o-postgresql-travem-com-pdfs-pesados-no-ollama</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/como-rodar-ias-em-larga-escala-sem-explodir-os-custos-operacionais-make-vs-zapier</loc>
+    <loc>https://www.polarlab.com.br//blog/como-migrar-do-make-para-o-n8n-self-hosted-em-vps-docker-para-reduzir-custos-de-automacao</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/elevenlabs-na-pratica-transforme-texto-em-voz-profissional-em-minutos</loc>
+    <loc>https://www.polarlab.com.br//blog/como-rodar-ias-em-larga-escala-sem-explodir-os-custos-operacionais-make-vs-zapier</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/o-fim-do-atendimento-lento-como-criar-um-agente-de-vendas-por-ia-que-vende-24-7</loc>
+    <loc>https://www.polarlab.com.br//blog/elevenlabs-na-pratica-transforme-texto-em-voz-profissional-em-minutos</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://polarlab.com.br/blog/review-elg-f80n-melhor-custo-beneficio-para-setup-de-streaming</loc>
+    <loc>https://www.polarlab.com.br//blog/o-fim-do-atendimento-lento-como-criar-um-agente-de-vendas-por-ia-que-vende-24-7</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.polarlab.com.br//blog/review-elg-f80n-melhor-custo-beneficio-para-setup-de-streaming</loc>
     <priority>0.6</priority>
   </url>
 </urlset>
