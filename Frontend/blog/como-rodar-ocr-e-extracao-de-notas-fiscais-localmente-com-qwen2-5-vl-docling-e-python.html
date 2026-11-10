@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Rodar OCR e Extração de Notas Fiscais Localmente com Qwen2.5-VL, Docling e Python | PolarLab</title>
+    <meta name="description" content="Aprenda a extrair tabelas complexas e dados de notas fiscais localmente em Python usando Qwen2.5-VL, IBM Docling e vLLM com privacidade total e custo zero de API.">
+
+    <!-- META TAGS DE COMPARTILHAMENTO (LINKEDIN / OPEN GRAPH) -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.polarlab.com.br//blog/como-rodar-ocr-e-extracao-de-notas-fiscais-localmente-com-qwen2-5-vl-docling-e-python">
+    <meta property="og:title" content="Como Rodar OCR e Extração de Notas Fiscais Localmente com Qwen2.5-VL, Docling e Python | PolarLab">
+    <meta property="og:description" content="Aprenda a extrair tabelas complexas e dados de notas fiscais localmente em Python usando Qwen2.5-VL, IBM Docling e vLLM com privacidade total e custo zero de API.">
+    <meta property="og:image" content="https://www.polarlab.com.br//assets/og-image-default.jpg">
+
+    <!--  SCHEMA MARKUP INJETADO VIA PYTHON (Google lê isso instantaneamente) -->
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "BlogPosting", "headline": "Como Rodar OCR e Extração de Notas Fiscais Localmente com Qwen2.5-VL, Docling e Python", "description": "Aprenda a extrair tabelas complexas e dados de notas fiscais localmente em Python usando Qwen2.5-VL, IBM Docling e vLLM com privacidade total e custo zero de API.", "datePublished": "2026-11-09", "url": "https://www.polarlab.com.br//blog/como-rodar-ocr-e-extracao-de-notas-fiscais-localmente-com-qwen2-5-vl-docling-e-python", "author": {"@type": "Person", "name": "Rafael"}, "publisher": {"@type": "Organization", "name": "PolarLab", "logo": {"@type": "ImageObject", "url": "https://www.polarlab.com.br//assets/logo.png"}}}
+    </script>
+
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-dark: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --accent-glow: #38BDF8;
+            --accent-purple: #A855F7;
+        }
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 40px 20px; line-height: 1.8; }
+        .container { max-width: 720px; margin: 0 auto; }
+        h1 { font-size: 2rem; color: #FFF; margin-bottom: 5px; line-height: 1.3; }
+        @media (max-width: 480px) { h1 { font-size: 1.5rem; } }
+        .meta-info { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 40px; }
+        .content { font-size: 1.15rem; color: #E2E8F0; }
+        
+        pre {
+            background-color: #1E293B;
+            border-left: 4px solid var(--accent-glow);
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            color: #38BDF8;
+            font-size: 0.95rem;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        h3 {
+            color: #FFF;
+            margin-top: 35px;
+            font-size: 1.35rem;
+        }
+        
+        .cta-container { background: linear-gradient(135deg, #1E1B4B 0%, #311042 100%); border: 1px solid var(--accent-purple); padding: 30px; border-radius: 12px; margin: 40px 0; text-align: center; box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
+        .cta-btn { display: inline-block; background: var(--accent-glow); color: #000; font-weight: bold; padding: 14px 32px; border-radius: 6px; text-decoration: none; margin-top: 20px; font-size: 1rem; transition: transform 0.2s, filter 0.2s; }
+        .cta-btn:hover { transform: scale(1.02); filter: brightness(1.1); }
+    </style>
+</head>
+<body>
+
+    <article class="container">
+        <h1>Como Rodar OCR e Extração de Notas Fiscais Localmente com Qwen2.5-VL, Docling e Python</h1>
+        <div class="meta-info">
+            <span>Categoria: <strong>Automação Financeira</strong></span> | <span>Publicado em: 09/11/2026</span>
+        </div>
+        
+        <div id="post-content" class="content">
+            <p>A automação de processos financeiros exige a conversão confiável de notas fiscais digitalizadas, DANFEs e PDFs complexos em dados estruturados, superando as limitações dos motores OCR tradicionais baseados em regex ou coordenadas estáticas que falham ao interpretar layouts tabulares densos e documentos rotacionados. O objetivo desta arquitetura local é substituir pipelines frágeis por um fluxo determinístico em Python capaz de ler pixels e camadas vetoriais, extraindo cabeçalhos fiscais, impostos retidos e itens tabulares diretamente para esquemas JSON validados sem envio de dados confidenciais para APIs externas.</p>
+        <h3>PRIMEIRA FERRAMENTA: Qwen2.5-VL-7B-Instruct</h3>
+        <p>O modelo multimodal Qwen2.5-VL-7B-Instruct, desenvolvido pela Alibaba com arquitetura de Resolução Dinâmica nativa e codificação posicional M-RoPE, processa imagens de documentos em alta resolução sem distorcer proporções ou perder legibilidade em fontes pequenas de notas fiscais. Para rodar este modelo localmente em precisão BF16 através das bibliotecas transformers e qwen-vl-utils exige-se uma GPU dedicada com pelo menos 16 gigabytes de memória VRAM e 32 gigabytes de memória RAM no sistema, enquanto versões quantizadas em AWQ ou GGUF de 4 bits operam confortavelmente em placas com 8 a 12 gigabytes de VRAM. Na prática financeira, o modelo substitui motores OCR legados ao compreender semanticamente a relação espacial entre colunas de CFOP, NCM, alíquotas de ICMS e valores unitários, retornando objetos JSON estruturados mesmo em faturas escaneadas com ruído visual ou carimbos sobrepostos.</p>
+        <h3>PROMPT EXATO: Extrator Fiscal Multimodal Qwen2.5-VL</h3>
+        <pre><code>"[PAPEL] Você é um motor de visão computacional especializado em auditoria contábil e extração de dados estruturados de notas fiscais brasileiras e faturas comerciais. [CONTEXTO] A entrada consiste na imagem de alta resolução de um documento fiscal contendo dados cadastrais do emissor e do tomador, grade detalhada de produtos ou serviços com tributação e quadro de totais financeiros. [RESTRIÇÕES] Retorne estritamente um objeto JSON válido sem marcadores de markdown, explicações ou texto adicional antes ou depois das chaves. Atribua o valor null para qualquer campo ausente ou ilegível no documento e nunca infira ou calcule valores numéricos inexistentes. [VARIÁVEIS] Tensor de imagem processado pelo AutoProcessor do Qwen2.5-VL com parâmetros min_pixels definidos em 200704 e max_pixels em 1003520. [OUTPUT] Objeto JSON contendo as chaves emitente_cnpj, destinatario_cnpj, numero_nota, serie, data_emissao, chave_acesso, itens como array de objetos com codigo, descricao, ncm, cfop, quantidade, valor_unitario, valor_total, aliquota_icms e o objeto totais com base_calculo_icms, valor_icms, valor_frete e valor_liquido_nota."</code></pre>
+        <h3>SEGUNDA FERRAMENTA: IBM Docling</h3>
+        <p>A biblioteca Docling, mantida pela IBM Research e instalada via pip install docling em ambientes Python 3.10 ou superiores, realiza o parsing avançado de documentos PDF nativos, digitalizados e imagens utilizando modelos especializados de análise de layout como o DocLayNet e o TableFormer. Em termos de desempenho e volumetria operacional, o Docling processa dezenas de páginas por minuto em servidores locais com CPU multi-core ou aceleração CUDA sem incorrer em custos variáveis por página cobrados por serviços proprietários como AWS Textract ou Azure Document Intelligence. Seu diferencial técnico na automação financeira reside na capacidade de reconstruir tabelas complexas com células mescladas e múltiplas linhas por item, exportando a hierarquia completa do documento em formato DoclingDocument, Markdown ou JSON com coordenadas exatas de caixas delimitadoras ou acoplando o Qwen2.5-VL nativamente através da classe VlmPipeline para leitura híbrida.</p>
+        <h3>PROMPT EXATO: Orquestração de Layout Tabular no Docling</h3>
+        <pre><code>"[PAPEL] Você é um especialista em engenharia de dados documentais configurando o pipeline de ingestão do IBM Docling para parsing de demonstrações financeiras e notas fiscais. [CONTEXTO] O diretório de entrada contém arquivos PDF multipágina e imagens TIFF ou PNG com tabelas de faturamento desalinhadas, cabeçalhos repetidos entre quebras de página e observações fiscais no rodapé. [RESTRIÇÕES] Habilite o modo TableFormerMode.ACCURATE nas opções de pipeline, mantenha a extração de coordenadas de bounding box ativa e proíba a fusão de colunas numéricas adjacentes durante a serialização. [VARIÁVEIS] Objeto PdfPipelineOptions configurado com do_table_structure igual a True, do_ocr igual a True e instância de DocumentConverter vinculada ao formato InputFormat.PDF. [OUTPUT] Estrutura de dados serializada via export_to_dict contendo a árvore de elementos textuais, metadados de página e matrizes tabulares convertidas em DataFrames pandas limpos."</code></pre>
+        <h3>TERCEIRA FERRAMENTA: Servidor vLLM com Integração Python Assíncrona</h3>
+        <p>O servidor de inferência vLLM executa o Qwen2.5-VL em produção local expondo um endpoint HTTP compatível com a especificação OpenAI na porta 8000, utilizando gerenciamento de memória PagedAttention para maximizar o throughput de tokens visuais e textuais simultâneos. Em comparação com a execução direta via scripts sequenciais em PyTorch, a arquitetura cliente-servidor com vLLM reduz a latência por documento em mais de sessenta por cento ao agrupar requisições concorrentes em lotes dinâmicos na GPU e manter os pesos do modelo residentes na VRAM. Aplicado à esteira financeira em Python, um worker assíncrono construído com asyncio, httpx e Pydantic valida os payloads retornados pelo servidor local contra esquemas rigorosos de tipagem, garantindo que apenas registros com soma matemática consistente entre itens e totais sigam para o banco de dados ERP ou sistema de contas a pagar.</p>
+        <h3>PROMPT EXATO: Worker Python de Validação Financeira com vLLM</h3>
+        <pre><code>"[PAPEL] Você é um engenheiro de software sênior implementando um microserviço assíncrono em Python para processamento em lote de documentos fiscais contra um servidor vLLM local. [CONTEXTO] O script monitora um diretório de fila local, converte documentos processados pelo Docling ou imagens em strings Base64 e envia requisições POST concorrentes para o modelo Qwen2.5-VL hospedado em localhost na porta 8000. [RESTRIÇÕES] Utilize semáforos asyncio para limitar a concorrência conforme a capacidade da GPU, aplique timeout de cento e vinte segundos por requisição, valide a resposta com modelos Pydantic v2 e mova arquivos com falha de validação de esquema para uma pasta de quarentena. [VARIÁVEIS] Endpoint VLLM_API_URL definido como http://localhost:8000/v1/chat/completions, parâmetro temperature configurado em 0.0 e limite de max_tokens em 4096. [OUTPUT] Código Python modular utilizando httpx.AsyncClient e BaseModel do Pydantic para ingestão paralela, validação de integridade numérica dos campos extraídos e persistência em arquivos JSON auditáveis."</code></pre>
+        <p>A integração entre o pré-processamento estrutural do Docling, a compreensão visual do Qwen2.5-VL e a inferência de alta vazão via vLLM consolida uma arquitetura soberana para extração de documentos financeiros em Python. Ao ajustar a resolução máxima de pixels conforme a densidade tipográfica de cada layout fiscal e manter a temperatura de amostragem zerada, equipes de engenharia eliminam alucinações numéricas, zeram custos recorrentes com APIs de terceiros e alcançam precisão determinística em fluxos críticos de auditoria e escrituração contábil.</p>
+            
+            
+            
+            <div class="cta-container" style="border-color: var(--accent-glow);">
+                <h3>Quer acelerar seus resultados com IA?</h3>
+                <p>Baixe nosso Guia Estratégico com mais de 500 prompts e templates prontos.</p>
+                <a href="https://pay.hotmart.com/W107630287U" data-track="true" data-name="Ebook - Guia PolarLab" data-category="Cursos &amp; E-books" data-featured="false" target="_blank" rel="noopener noreferrer" class="cta-btn" style="background: var(--accent-purple); color: #fff;">Garantir E-book com Desconto</a>
+            </div>
+        
+        </div>
+    </article>
+
+    <script>
+        document.getElementById('post-content').addEventListener('click', function(e) {
+            const link = e.target.closest('[data-track]');
+            if (link) {
+                const name = link.getAttribute('data-name');
+                const category = link.getAttribute('data-category');
+                const affiliateLink = link.getAttribute('href');
+                const isFeatured = link.getAttribute('data-featured') === 'true';
+                
+                if (!affiliateLink || affiliateLink === "#" || affiliateLink.trim() === "") return;
+
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'click_cta_blog', { 'product_name': name, 'category': category });
+                }
+                
+                if (navigator.sendBeacon) {
+                    const headers = { type: 'application/json' };
+                    const payload = new Blob([JSON.stringify({ name: name, category: category, affiliateLink: affiliateLink, isFeatured: isFeatured })], headers);
+                    navigator.sendBeacon('https://seu-backend-render.com', payload);
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('pre code').forEach((codeBlock) => {
+                const preContainer = codeBlock.parentElement;
+                if (!preContainer || preContainer.querySelector('.copy-prompt-button')) return;
+
+                const button = document.createElement('button');
+button.type = 'button';
+button.className = 'copy-prompt-button';
+button.innerText = 'Copiar Prompt 📋';
+
+button.style.cssText = 'position: absolute; right: 12px; top: 12px; background: #00b4d8; color: #ffffff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 180, 216, 0.3); transition: all 0.2s ease-in-out; z-index: 10;';
+
+preContainer.style.position = 'relative';
+preContainer.style.paddingTop = '48px';
+preContainer.appendChild(button);
+
+                button.addEventListener('mouseenter', () => { button.style.background = '#0077b6'; });
+                button.addEventListener('mouseleave', () => { button.style.background = '#00b4d8'; });
+
+                button.addEventListener('click', async () => {
+                    const textoLimpo = codeBlock.innerText.replace(/^"|"$/g, '').trim();
+                    try {
+                        if (navigator.clipboard && window.isSecureContext) {
+                            await navigator.clipboard.writeText(textoLimpo);
+                        } else {
+                            const textarea = document.createElement('textarea');
+                            textarea.value = textoLimpo;
+                            textarea.setAttribute('readonly', '');
+                            textarea.style.position = 'fixed';
+                            textarea.style.opacity = '0';
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            if (!document.execCommand('copy')) throw new Error('Copy failed');
+                            textarea.remove();
+                        }
+                        button.innerText = 'Copiado! ✓';
+                        button.style.background = '#2a9d8f';
+                        button.style.boxShadow = '0 4px 10px rgba(42, 157, 143, 0.4)';
+                        
+                        setTimeout(() => {
+                            button.innerText = 'Copiar Prompt 📋';
+                            button.style.background = '#00b4d8';
+                            button.style.boxShadow = '0 4px 10px rgba(0, 180, 216, 0.3)';
+                        }, 2000);
+                    } catch (error) {
+                        button.innerText = 'Falha ao copiar';
+                        setTimeout(() => { button.innerText = 'Copiar Prompt 📋'; }, 2000);
+                    }
+                });
+            });
+        });
+    </script>
+    
+</body>
+
+</html>
