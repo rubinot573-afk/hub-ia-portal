@@ -17,6 +17,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.polarlab.com.br//blog/como-auditar-e-avaliar-modelos-de-ia-em-producao-com-promptfoo-e-llm-as-a-judge</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://www.polarlab.com.br//blog/como-conectar-agentes-de-ia-locais-a-bancos-de-dados-via-mcp-e-docker-com-seguranca-total</loc>
     <priority>0.6</priority>
   </url>
